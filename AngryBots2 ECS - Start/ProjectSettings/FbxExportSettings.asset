@@ -1,0 +1,22 @@
+{
+    "MonoBehaviour": {
+        "m_Enabled": true,
+        "m_EditorHideFlags": 0,
+        "m_Name": "Fbx Export Settings",
+        "m_EditorClassIdentifier": "",
+        "mayaCompatibleNames": true,
+        "centerObjects": true,
+        "launchAfterInstallation": true,
+        "HideSendToUnityMenu": true,
+        "ExportFormatSelection": 0,
+        "IntegrationSavePath": "C:/Users/Andy Touch/Documents/Unity Projects/AngryBots2/AngryBots2_UniteAsiaKeynoteDemo/AngryBots2_ArtistWorkflowsDemo_Project",
+        "selectedDCCApp": 0,
+        "convertToModelSavePath": "__FBXLevel",
+        "dccOptionNames": [
+            "Maya 2018"
+        ],
+        "dccOptionPaths": [
+            "C:/Program Files/Autodesk/Maya2018/bin/maya.exe"
+        ]
+    }
+}
