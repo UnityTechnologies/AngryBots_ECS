@@ -31,7 +31,7 @@ public class EnemySpawnSystem : ComponentSystem
 			PostUpdateCommands.CreateEntity(EnemySpawnBootstrapper.enemyArchetype);
 			PostUpdateCommands.SetComponent(new Position { Value = position });
 			PostUpdateCommands.SetComponent(new Health { Value = 1 });
-			PostUpdateCommands.SetComponent(new MoveSpeed { speed = Settings.main.enemySpeed });
+			PostUpdateCommands.SetComponent(new MoveSpeed { Value = Settings.main.enemySpeed });
 			PostUpdateCommands.SetSharedComponent(EnemySpawnBootstrapper.enemyRenderer);
 		}
 		spawner.cooldown[0] = cooldown;
@@ -55,8 +55,7 @@ public static class EnemySpawnBootstrapper
 												typeof(Rotation),
 												typeof(MoveForward),
 												typeof(MoveSpeed),
-												typeof(MeshInstanceRenderer),
-												typeof(TransformMatrix));
+												typeof(MeshInstanceRenderer));
 
 		GameObject proto = Settings.main.enemyPrototype;
 		enemyRenderer = proto.GetComponent<MeshInstanceRendererComponent>().Value;

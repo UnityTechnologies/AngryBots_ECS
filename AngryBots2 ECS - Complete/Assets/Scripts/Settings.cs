@@ -1,5 +1,4 @@
-﻿using Unity.Mathematics;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Settings : MonoBehaviour
 {
@@ -36,7 +35,7 @@ public class Settings : MonoBehaviour
 		float radius = main.enemySpawnRadius;
 		Vector3 playerPos = main.player.position;
 
-		float angle = Random.Range(0f, 2 * Mathf.PI);
+		float angle = UnityEngine.Random.Range(0f, 2 * Mathf.PI);
 		float s = Mathf.Sin(angle);
 		float c = Mathf.Cos(angle);
 		

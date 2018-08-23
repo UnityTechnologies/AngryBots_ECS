@@ -379,6 +379,7 @@ GameObject:
   - component: {fileID: 136433486275610172}
   - component: {fileID: 95790324078749254}
   - component: {fileID: 114445215679820892}
+  - component: {fileID: 114392072156039266}
   m_Layer: 0
   m_Name: Player_Completed
   m_TagString: Player
@@ -1069,7 +1070,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1575807539840528}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.689, y: 0.087, z: 0}
+  m_LocalPosition: {x: -0.85, y: 0.087, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4008870794555688}
@@ -1615,8 +1616,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1500293480320252}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 10.626, y: -0.93, z: -17.11}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.26, y: -1.01, z: -18.93}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4672117754167224}
@@ -1627,7 +1628,7 @@ Transform:
   - {fileID: 4237538556911744}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4874942414546934
 Transform:
   m_ObjectHideFlags: 1
@@ -1848,8 +1849,8 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 60f99d9ab134948a1a32867a6a5ebf8c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
+  m_Volume: 0.5
+  m_Pitch: 0.8
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -1975,7 +1976,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 1
+  m_RenderMode: 2
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1987,6 +1988,27 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114392072156039266
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1500293480320252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c6ec7c1cfc23b4692af64881e419f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseECS: 0
+  spreadShot: 0
+  gunBarrel: {fileID: 4129155176228248}
+  shotVFX: {fileID: 198063976594163044}
+  shotAudio: {fileID: 82777586598894398}
+  fireRate: 0.1
+  spreadAmount: 20
+  bulletPrefab: {fileID: 1218724716591446, guid: c4b4b81382c254a999d09f9375fbe2c7,
+    type: 2}
+  bulletPrefabECS: {fileID: 0}
 --- !u!114 &114445215679820892
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2014,7 +2036,7 @@ CapsuleCollider:
   m_Radius: 0.34
   m_Height: 2.19
   m_Direction: 1
-  m_Center: {x: 0, y: 1.2, z: 0}
+  m_Center: {x: 0, y: 1.1, z: 0}
 --- !u!137 &137986215853041630
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -24605,7 +24627,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 3
       minScalar: 10
       maxCurve:
         serializedVersion: 2
