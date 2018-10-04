@@ -30,7 +30,7 @@ namespace Unity.Transforms
 		ComponentGroup m_MoveForwardRotationGroup;
 
 
-		protected override void OnCreateManager(int capacity)
+		protected override void OnCreateManager()
 		{
 			m_MoveForwardRotationGroup = GetComponentGroup(
 				ComponentType.ReadOnly(typeof(MoveForward)),

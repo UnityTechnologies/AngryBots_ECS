@@ -26,7 +26,7 @@ public class TurnTowardsPlayerSystem : ComponentSystem
 		{
 			float3 heading = playerPos - enemies.position[i].Value;
 			heading.y = 0f; 
-			enemies.rotation[i] = new Rotation { Value = quaternion.lookRotation(heading, math.up())};
+			enemies.rotation[i] = new Rotation { Value = quaternion.LookRotation(heading, math.up())};
 		}
 	}
 }
