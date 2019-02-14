@@ -1,33 +1,47 @@
 ﻿using Unity.Entities;
+using Unity.Jobs;
 using Unity.Transforms;
 using UnityEngine;
 
+[UpdateAfter(typeof(BulletCullingSystem))]
+public class CullingBarrier : BarrierSystem
+{ }
+
 [UpdateAfter(typeof(MoveForwardSystem))]
-public class BulletCullingSystem : ComponentSystem
+public class BulletCullingSystem : JobComponentSystem
 {
-	struct BulletGroup
+	CullingBarrier barrier;
+
+	protected override void OnCreateManager()
 	{
-		public readonly int Length;
-		public EntityArray entity;
-		public ComponentDataArray<Bullet> bullet;
+		barrier = World.Active.GetOrCreateManager<CullingBarrier>();
 	}
-	[Inject] BulletGroup bullets;
 
-	protected override void OnUpdate()
+	struct BulletCullingJob : IJobProcessComponentDataWithEntity<TimeToLive>
 	{
-		bool isPlayerDead = Settings.main.player == null;
-		float dt = Time.deltaTime;
+		public EntityCommandBuffer.Concurrent commands;
+		public float dt;
 
-		for (int i = 0; i < bullets.Length; ++i)
+		public void Execute(Entity entity, int jobIndex, ref TimeToLive timeToLive)
 		{
-			Bullet b = bullets.bullet[i];
-			b.TimeToLive -= dt;
-
-			if (b.TimeToLive <= 0f || isPlayerDead)
-				PostUpdateCommands.DestroyEntity(bullets.entity[i]);
-	
-			bullets.bullet[i] = b;
+			timeToLive.Value -= dt;
+			if (timeToLive.Value <= 0f)
+				commands.DestroyEntity(jobIndex, entity);
 		}
+	}
+
+	protected override JobHandle OnUpdate(JobHandle inputDeps)
+	{
+		var job = new BulletCullingJob
+		{
+			commands = barrier.CreateCommandBuffer().ToConcurrent(),
+			dt = Time.deltaTime
+		};
+
+		var handle = job.Schedule(this, inputDeps);
+		barrier.AddJobHandleForProducer(handle);
+
+		return handle;
 	}
 }
 

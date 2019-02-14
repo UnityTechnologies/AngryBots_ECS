@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
@@ -7,63 +8,54 @@ using UnityEngine.Experimental.PlayerLoop;
 [UpdateAfter(typeof(Initialization))]
 public class EnemySpawnSystem : ComponentSystem
 {
-	struct SpawnerGroup
-	{
-		public ComponentDataArray<EnemySpawnCooldown> cooldown;
-	}
-	[Inject] SpawnerGroup spawner;
+	ComponentGroup spawnerGroup;
 
+	protected override void OnCreateManager()
+	{
+		spawnerGroup = GetComponentGroup(typeof(Spawner));
+	}
 
 	protected override void OnUpdate()
 	{
 		if (Settings.main.player == null || !Settings.main.spawnEnemies)
 			return;
 
-		EnemySpawnCooldown cooldown = spawner.cooldown[0];
-		cooldown.Value -= Time.deltaTime;		
-
-		if (cooldown.Value <= 0f)
+		using (var spawnerEntityArray = spawnerGroup.ToEntityArray(Allocator.TempJob))
 		{
-			cooldown.Value = Settings.main.enemySpawnRate;
+			foreach (var spawnerEntity in spawnerEntityArray)
+			{
+				Spawner spawner = EntityManager.GetSharedComponentData<Spawner>(spawnerEntity);
 
-			Vector3 position = Settings.GetPositionAroundPlayer();
+				spawner.cooldown -= Time.deltaTime;
 
-			PostUpdateCommands.CreateEntity(EnemySpawnBootstrapper.enemyArchetype);
-			PostUpdateCommands.SetComponent(new Position { Value = position });
-			PostUpdateCommands.SetComponent(new Health { Value = 1 });
-			PostUpdateCommands.SetComponent(new MoveSpeed { Value = Settings.main.enemySpeed });
-			PostUpdateCommands.SetSharedComponent(EnemySpawnBootstrapper.enemyRenderer);
+				if (spawner.cooldown <= 0f)
+				{
+					spawner.cooldown = Settings.main.enemySpawnRate;
+
+					Entity enemyEntity = EntityManager.Instantiate(spawner.prefab);
+					EntityManager.SetComponentData(enemyEntity, new Position { Value = Settings.GetPositionAroundPlayer() });
+				}
+
+				EntityManager.SetSharedComponentData(spawnerEntity, spawner);
+			}
 		}
-		spawner.cooldown[0] = cooldown;
 	}
 }
 
 public static class EnemySpawnBootstrapper
 {
-	public static EntityArchetype enemyArchetype;
-	public static MeshInstanceRenderer enemyRenderer;
-
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 	public static void Initialize()
 	{
 		EntityManager manager = World.Active.GetOrCreateManager<EntityManager>();
-
-		//Set up enemy
-		enemyArchetype = manager.CreateArchetype(typeof(EnemyTag),
-												typeof(Health),
-												typeof(Position),
-												typeof(Rotation),
-												typeof(MoveForward),
-												typeof(MoveSpeed),
-												typeof(MeshInstanceRenderer));
-
 		GameObject proto = Settings.main.enemyPrototype;
-		enemyRenderer = proto.GetComponent<MeshInstanceRendererComponent>().Value;
 
 		//Setup spawner
-		EntityArchetype spawnArch = manager.CreateArchetype(typeof(EnemySpawnCooldown));
+		EntityArchetype spawnArch = manager.CreateArchetype(typeof(Spawner));
 
 		Entity spawner = manager.CreateEntity(spawnArch);
-		manager.SetComponentData(spawner, new EnemySpawnCooldown { Value = 0f });
+
+		manager.SetSharedComponentData(spawner, new Spawner { cooldown = 0f,
+														prefab = proto});
 	}
 }

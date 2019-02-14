@@ -1,33 +1,41 @@
-﻿using Unity.Collections;
+﻿using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 [UpdateBefore(typeof(MoveForwardSystem))]
-public class TurnTowardsPlayerSystem : ComponentSystem
+public class TurnTowardsPlayerSystem : JobComponentSystem
 {
-	struct EnemyGroup
+	[BurstCompile]
+	[RequireComponentTag(typeof(EnemyTag))]
+	struct TurnTowardsPlayerJob : IJobProcessComponentData<Position, Rotation>
 	{
-		public ComponentDataArray<Rotation> rotation;
-		[ReadOnly] public ComponentDataArray<Position> position;
-		[ReadOnly] public ComponentDataArray<EnemyTag> tag;
+		public float3 playerPosition; 
+		public float dt;
+
+		public void Execute([ReadOnly] ref Position pos, ref Rotation rot)
+		{
+			float3 heading = playerPosition - pos.Value;
+			heading.y = 0f;
+			rot.Value = quaternion.LookRotation(heading, math.up());
+		}
 	}
-	[Inject]
-	EnemyGroup enemies;
 
-
-	protected override void OnUpdate()
+	protected override JobHandle OnUpdate(JobHandle inputDeps)
 	{
 		if (Settings.main.player == null)
-			return;
-
-		float3 playerPos = Settings.main.player.position;
-		for (int i = 0; i < enemies.position.Length; i++)
+			return inputDeps;
+		
+		var job = new TurnTowardsPlayerJob
 		{
-			float3 heading = playerPos - enemies.position[i].Value;
-			heading.y = 0f; 
-			enemies.rotation[i] = new Rotation { Value = quaternion.LookRotation(heading, math.up())};
-		}
+			playerPosition = Settings.main.player.position,
+			dt = Time.deltaTime
+		};
+
+		return job.Schedule(this, inputDeps);
 	}
 }
 

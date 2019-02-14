@@ -27,7 +27,7 @@ public class CollisionSystem : JobComponentSystem
 
 	struct BulletGroup
 	{
-		public ComponentDataArray<Bullet> bullet;
+		public ComponentDataArray<TimeToLive> bullet;
 		public ComponentDataArray<Position> position;
 	}
 
@@ -44,7 +44,7 @@ public class CollisionSystem : JobComponentSystem
 		[ReadOnly] public ComponentDataArray<Position> enemyPos;
 		[ReadOnly] public ComponentDataArray<Position> bulletPos;
 		[NativeDisableParallelForRestriction]
-		public ComponentDataArray<Bullet> bullets;
+		public ComponentDataArray<TimeToLive> bullets;
 
 
 		public void Execute(int eI)
@@ -55,7 +55,7 @@ public class CollisionSystem : JobComponentSystem
 			{
 				if (CheckCollision(enemyPos[eI].Value, bulletPos[bI].Value, radius))
 				{
-					bullets[bI] = new Bullet { TimeToLive = 0f };
+					bullets[bI] = new TimeToLive { Value = 0f };
 					damage += 1;
 				}
 			}

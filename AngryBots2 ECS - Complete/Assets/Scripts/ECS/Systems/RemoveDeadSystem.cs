@@ -6,7 +6,7 @@ using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
 
-[UpdateBefore(typeof(MeshInstanceRenderer))]
+[UpdateBefore(typeof(RenderMeshSystem))]
 public class RemoveDeadSystem : ComponentSystem
 {
 	struct NPCGroup
@@ -46,52 +46,3 @@ public class RemoveDeadSystem : ComponentSystem
 		}
 	}
 }
-
-//==========ALTERNATE WAY OF REMOVING DEAD ENEMIES WITH A JOB===========
-//public class RemoveDeadBarrier : BarrierSystem
-//{
-//}
-
-//public class RemoveDeadSystem : JobComponentSystem
-//{
-//	struct Data
-//	{
-//		[ReadOnly] public EntityArray Entity;
-//		[ReadOnly] public ComponentDataArray<Health> Health;
-//		[ReadOnly] public SubtractiveComponent<PlayerTag> tag;
-//	}
-
-//	[Inject] private Data m_Data;
-//	[Inject] private RemoveDeadBarrier m_RemoveDeadBarrier;
-
-//	[BurstCompile]
-//	struct RemoveReadJob : IJob
-//	{
-//		public bool playerDead;
-//		[ReadOnly] public EntityArray Entity;
-//		[ReadOnly] public ComponentDataArray<Health> Health;
-//		public EntityCommandBuffer Commands;
-
-//		public void Execute()
-//		{
-//			for (int i = 0; i < Entity.Length; ++i)
-//			{
-//				if (Health[i].Value <= 0.0f || playerDead)
-//				{
-//					Commands.DestroyEntity(Entity[i]);
-//				}
-//			}
-//		}
-//	}
-
-//	protected override JobHandle OnUpdate(JobHandle inputDeps)
-//	{
-//		return new RemoveReadJob
-//		{
-//			playerDead = GameSettings.current.player == null,
-//			Entity = m_Data.Entity,
-//			Health = m_Data.Health,
-//			Commands = m_RemoveDeadBarrier.CreateCommandBuffer(),
-//		}.Schedule(inputDeps);
-//	}
-//}

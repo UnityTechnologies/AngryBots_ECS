@@ -3,7 +3,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Transforms;
 using UnityEngine;
 
 namespace Unity.Transforms
@@ -11,46 +10,25 @@ namespace Unity.Transforms
 	public class MoveForwardSystem : JobComponentSystem
 	{
 		[BurstCompile]
-		struct MoveForwardRotation : IJobParallelFor
+		[RequireComponentTag(typeof(MoveForward))]
+		struct MoveForwardRotation : IJobProcessComponentData<Position, Rotation, MoveSpeed>
 		{
-			public ComponentDataArray<Position> positions;
-			[ReadOnly] public ComponentDataArray<Rotation> rotations;
-			[ReadOnly] public ComponentDataArray<MoveSpeed> moveSpeeds;
 			public float dt;
 
-			public void Execute(int i)
+			public void Execute(ref Position pos, [ReadOnly] ref Rotation rot, [ReadOnly] ref MoveSpeed speed)
 			{
-				positions[i] = new Position
-				{
-					Value = positions[i].Value + (dt * moveSpeeds[i].Value * math.forward(rotations[i].Value))
-				};
+				pos.Value = pos.Value + (dt * speed.Value * math.forward(rot.Value));
 			}
-		}
-
-		ComponentGroup m_MoveForwardRotationGroup;
-
-
-		protected override void OnCreateManager()
-		{
-			m_MoveForwardRotationGroup = GetComponentGroup(
-				ComponentType.ReadOnly(typeof(MoveForward)),
-				ComponentType.ReadOnly(typeof(Rotation)),
-				ComponentType.ReadOnly(typeof(MoveSpeed)),
-				typeof(Position));
 		}
 
 		protected override JobHandle OnUpdate(JobHandle inputDeps)
 		{
 			var moveForwardRotationJob = new MoveForwardRotation
 			{
-				positions = m_MoveForwardRotationGroup.GetComponentDataArray<Position>(),
-				rotations = m_MoveForwardRotationGroup.GetComponentDataArray<Rotation>(),
-				moveSpeeds = m_MoveForwardRotationGroup.GetComponentDataArray<MoveSpeed>(),
 				dt = Time.deltaTime
 			};
 
-			return moveForwardRotationJob.Schedule(m_MoveForwardRotationGroup.CalculateLength(), 64, inputDeps);
+			return moveForwardRotationJob.Schedule(this, inputDeps);
 		}
 	}
 }
-
