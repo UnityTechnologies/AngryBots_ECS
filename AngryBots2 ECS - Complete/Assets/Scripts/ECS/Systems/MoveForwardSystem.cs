@@ -11,11 +11,11 @@ namespace Unity.Transforms
 	{
 		[BurstCompile]
 		[RequireComponentTag(typeof(MoveForward))]
-		struct MoveForwardRotation : IJobProcessComponentData<Position, Rotation, MoveSpeed>
+		struct MoveForwardRotation : IJobForEach<Translation, Rotation, MoveSpeed>
 		{
 			public float dt;
 
-			public void Execute(ref Position pos, [ReadOnly] ref Rotation rot, [ReadOnly] ref MoveSpeed speed)
+			public void Execute(ref Translation pos, [ReadOnly] ref Rotation rot, [ReadOnly] ref MoveSpeed speed)
 			{
 				pos.Value = pos.Value + (dt * speed.Value * math.forward(rot.Value));
 			}

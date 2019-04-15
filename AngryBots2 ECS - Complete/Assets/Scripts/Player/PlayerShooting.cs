@@ -22,12 +22,16 @@ public class PlayerShooting : MonoBehaviour
 	float timer;
 
 	EntityManager manager;
+	Entity bulletEntityPrefab;
 
 
 	void Start()
 	{
-		if(UseECS)
-			manager = World.Active.GetOrCreateManager<EntityManager>();
+		if (UseECS)
+		{
+			manager = World.Active.EntityManager;
+			bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, World.Active);
+		}
 	}
 
 	void Update()
@@ -90,8 +94,9 @@ public class PlayerShooting : MonoBehaviour
 
 	void SpawnBulletECS(Vector3 rotation)
 	{
-		Entity bullet = manager.Instantiate(bulletPrefabECS);
-		manager.SetComponentData(bullet, new Position { Value = gunBarrel.position });
+		Entity bullet = manager.Instantiate(bulletEntityPrefab);
+
+		manager.SetComponentData(bullet, new Translation { Value = gunBarrel.position });
 		manager.SetComponentData(bullet, new Rotation { Value = Quaternion.Euler(rotation) });
 	}
 
@@ -103,9 +108,6 @@ public class PlayerShooting : MonoBehaviour
 		
 		Vector3 tempRot = rotation;
 		int index = 0;
-
-		NativeArray<Entity> bullets = new NativeArray<Entity>(totalAmount, Allocator.Temp);
-		manager.Instantiate(bulletPrefabECS, bullets);
 		
 		for (int x = min; x < max; x++)
 		{
@@ -114,14 +116,14 @@ public class PlayerShooting : MonoBehaviour
 			for (int y = min; y < max; y++)
 			{
 				tempRot.y = (rotation.y + 3 * y) % 360;
-				
-				manager.SetComponentData(bullets[index], new Position { Value = gunBarrel.position });
-				manager.SetComponentData(bullets[index], new Rotation { Value = Quaternion.Euler(tempRot) });
+
+				Entity bullet = manager.Instantiate(bulletEntityPrefab);
+				manager.SetComponentData(bullet, new Translation { Value = gunBarrel.position });
+				manager.SetComponentData(bullet, new Rotation { Value = Quaternion.Euler(tempRot) });
+
 				index++;
 			}
 		}
-		
-		bullets.Dispose();
 	}
 }
 

@@ -7,4 +7,3 @@ public struct Health : IComponentData
 	public float Value;
 }
 
-public class HealthComponent : ComponentDataWrapper<Health> { }

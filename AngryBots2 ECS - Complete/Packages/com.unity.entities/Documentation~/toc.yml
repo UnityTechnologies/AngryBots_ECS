@@ -1,0 +1,103 @@
+# Unity Entity Component TOC
+#- name: Data-oriented design in Unity
+#  href: doo_design.md
+#- name: Execution order of events
+#  href: execution_order.md
+#- name: Anatomy of an ECS scene
+#  href: ecs_anatomy.md
+#- name: ECS project status
+#  href: ecs_project_status.md
+- name: Overview
+  href: index.md
+- name: Core ECS
+  items:
+    - name: Entities
+      href: ecs_entities.md
+      items:
+        - name: Worlds
+          href: world.md
+    - name: Components
+      href: ecs_components.md
+      items:
+        - name: General Purpose Components
+          href: component_data.md
+        - name: Shared Components
+          href: shared_component_data.md
+        - name: System State Components
+          href: system_state_components.md
+        - name: Dynamic Buffer Components
+          href: dynamic_buffers.md
+    - name: System
+      href: ecs_systems.md
+      items:
+        - name: Component Systems
+          href: component_system.md
+        - name: Job Component Systems
+          href: job_component_system.md
+        - name: Entity Command Buffers
+          href: entity_command_buffer.md
+        - name: System Update Order
+          href: system_update_order.md
+    - name: Accessing Entity Data
+      href: chunk_iteration.md
+      items:
+          - name: Using IJobForEach
+            href: entity_iteration_job.md
+          - name: Using IJobChunk
+            href: chunk_iteration_job.md
+          - name: Using ComponentSystem and ForEach
+            href: entity_iteration_foreach.md
+          - name: Manual iteration
+            href: manual_iteration.md
+          - name: Component Groups
+            href: component_group.md
+    - name: Versions and Generations
+      href: version_numbers.md
+#    - name: Using Burst
+#      href: ecs_burst.md
+#    - name: Data Structures
+#      href: ecs_data_structures.md
+    - name: Jobs in ECS
+      href: ecs_job_overview.md
+      items:
+        - name: ECS Job System extensions
+          href: ecs_job_extensions.md
+- name: Creating Gameplay
+#  href: ecs_gameplay.md
+  items:
+#    - name: Scenes
+#      href: gp_scenes.md
+    - name: Transforms
+      href: transform_system.md
+    - name: Rendering
+      href: gp_rendering.md
+#    - name: Sharing data between MonoBehaviours and systems
+#      href: gp_ecs_interop.md
+#    - name: Physics
+#      href: gp_physics.md
+#    - name: Player input
+#      href: gp_input.md
+#    - name: Animation
+#      href: gp_animation.md
+#    - name: Networking and Multiplayer
+#      href: gp_multiplayer.md
+#    - name: Pathfinding and AI
+#      href: gp_ai.md
+#    - name: Audio
+#      href: gp_audio.md
+#    - name: User interface
+#      href: gp_ui.md
+#    - name: Handling text
+#      href: gp_text_handling.md
+#    - name: Prefabs
+#      href: gp_prefabs.md
+#    - name: Assets and resources
+#      href: gp_assets.md
+# - name: Debugging
+#   href: ecs_debugging.md
+# - name: Profiling
+#   href: ecs_profiling.md
+# - name: Unit Tests
+#   href: ecs_testing.md
+# - name: Building a project
+#   href: ecs_building_projects.md

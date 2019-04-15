@@ -1,23 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Unity.Entities;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class ProjectileBehaviour : MonoBehaviour {
+public class ProjectileBehaviour : MonoBehaviour, IConvertGameObjectToEntity
+{
 
 	[Header("Movement")]
-	public float speed;
-	private Rigidbody projectileRigidbody;
+	public float speed = 50f;
 
 	[Header("Life Settings")]
-	public float lifeTime;
+	public float lifeTime = 2f;
 
-	[Header("Damage")]
-	public int damageToEnemy;
-
-	[Header("Hit Object AVFX")]
-	public GameObject hitEnemyParticles;
-	public GameObject hitWallParticles;
+	Rigidbody projectileRigidbody;
 
 
 	void Start()
@@ -27,24 +21,10 @@ public class ProjectileBehaviour : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider theCollider)
-	{	
- 
-		if(theCollider.CompareTag("Enemy"))
-		{
-			if(damageToEnemy > 0)
-			{
-					
-			}
+	{
 
-			Instantiate(hitEnemyParticles, transform.position, transform.rotation);
+		if (theCollider.CompareTag("Enemy") || theCollider.CompareTag("Environment"))
 			RemoveProjectile();
-
-		} else if (theCollider.CompareTag("Environment"))
-		{
-			Instantiate(hitWallParticles, transform.position, transform.rotation);
-			RemoveProjectile();
-		}
-
 	}
 	
 	void Update()
@@ -58,4 +38,14 @@ public class ProjectileBehaviour : MonoBehaviour {
 		Destroy(gameObject);
 	}
 
+	public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)
+	{
+		manager.AddComponent(entity, typeof(MoveForward));
+
+		MoveSpeed moveSpeed = new MoveSpeed { Value = speed };		
+		manager.AddComponentData(entity, moveSpeed);
+
+		TimeToLive timeToLive = new TimeToLive { Value = lifeTime };
+		manager.AddComponentData(entity, timeToLive);
+	}
 }

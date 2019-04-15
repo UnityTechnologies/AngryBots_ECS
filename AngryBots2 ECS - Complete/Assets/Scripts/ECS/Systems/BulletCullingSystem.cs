@@ -4,7 +4,7 @@ using Unity.Transforms;
 using UnityEngine;
 
 [UpdateAfter(typeof(BulletCullingSystem))]
-public class CullingBarrier : BarrierSystem
+public class CullingBarrier : EntityCommandBufferSystem
 { }
 
 [UpdateAfter(typeof(MoveForwardSystem))]
@@ -14,10 +14,10 @@ public class BulletCullingSystem : JobComponentSystem
 
 	protected override void OnCreateManager()
 	{
-		barrier = World.Active.GetOrCreateManager<CullingBarrier>();
+		barrier = World.Active.GetOrCreateSystem<CullingBarrier>();
 	}
 
-	struct BulletCullingJob : IJobProcessComponentDataWithEntity<TimeToLive>
+	struct BulletCullingJob : IJobForEachWithEntity<TimeToLive>
 	{
 		public EntityCommandBuffer.Concurrent commands;
 		public float dt;

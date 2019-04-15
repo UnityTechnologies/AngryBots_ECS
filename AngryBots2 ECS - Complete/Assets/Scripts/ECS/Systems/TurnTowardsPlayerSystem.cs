@@ -11,12 +11,12 @@ public class TurnTowardsPlayerSystem : JobComponentSystem
 {
 	[BurstCompile]
 	[RequireComponentTag(typeof(EnemyTag))]
-	struct TurnTowardsPlayerJob : IJobProcessComponentData<Position, Rotation>
+	struct TurnTowardsPlayerJob : IJobProcessComponentData<Translation, Rotation>
 	{
 		public float3 playerPosition; 
 		public float dt;
 
-		public void Execute([ReadOnly] ref Position pos, ref Rotation rot)
+		public void Execute([ReadOnly] ref Translation pos, ref Rotation rot)
 		{
 			float3 heading = playerPosition - pos.Value;
 			heading.y = 0f;

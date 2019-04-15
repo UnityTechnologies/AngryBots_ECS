@@ -6,4 +6,3 @@ public struct TimeToLive : IComponentData
 {
 	public float Value;
 }
-public class TimeToLiveComponent : ComponentDataWrapper<TimeToLive> { }

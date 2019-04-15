@@ -8,11 +8,11 @@ using UnityEngine.Experimental.PlayerLoop;
 [UpdateAfter(typeof(Initialization))]
 public class EnemySpawnSystem : ComponentSystem
 {
-	ComponentGroup spawnerGroup;
+	EntityQuery spawnerGroup;
 
 	protected override void OnCreateManager()
 	{
-		spawnerGroup = GetComponentGroup(typeof(Spawner));
+		spawnerGroup = GetEntityQuery(typeof(Spawner));
 	}
 
 	protected override void OnUpdate()
@@ -33,7 +33,7 @@ public class EnemySpawnSystem : ComponentSystem
 					spawner.cooldown = Settings.main.enemySpawnRate;
 
 					Entity enemyEntity = EntityManager.Instantiate(spawner.prefab);
-					EntityManager.SetComponentData(enemyEntity, new Position { Value = Settings.GetPositionAroundPlayer() });
+					EntityManager.SetComponentData(enemyEntity, new Translation { Value = Settings.GetPositionAroundPlayer() });
 				}
 
 				EntityManager.SetSharedComponentData(spawnerEntity, spawner);
@@ -47,7 +47,7 @@ public static class EnemySpawnBootstrapper
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 	public static void Initialize()
 	{
-		EntityManager manager = World.Active.GetOrCreateManager<EntityManager>();
+		EntityManager manager = World.Active.GetOrCreateSystem<EntityManager>();
 		GameObject proto = Settings.main.enemyPrototype;
 
 		//Setup spawner
