@@ -32,6 +32,7 @@ public class BulletCullingSystem : JobComponentSystem
 
 	protected override JobHandle OnUpdate(JobHandle inputDeps)
 	{
+		return inputDeps;
 		var job = new BulletCullingJob
 		{
 			commands = barrier.CreateCommandBuffer().ToConcurrent(),

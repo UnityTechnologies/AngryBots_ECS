@@ -6,15 +6,9 @@ public class Settings : MonoBehaviour
 
 	[Header("Game Object References")]
 	public Transform player;
-	public GameObject enemyPrototype;
 	public GameObject bulletHitPrefab;
-	
-	[Header("Enemy Info")]
-	public float enemySpeed = 2f;
 
 	[Header ("Enemy Spawn Info")]
-	public bool spawnEnemies = true;
-	public float enemySpawnRate = 1f;
 	public float enemySpawnRadius = 10f;
 
 	[Header("Collision Info")]

@@ -1,136 +1,102 @@
-﻿//using Unity.Burst;
-//using Unity.Collections;
-//using Unity.Entities;
-//using Unity.Jobs;
-//using Unity.Mathematics;
-//using Unity.Transforms;
+﻿using Unity.Burst;
+using Unity.Collections;
+using Unity.Entities;
+using Unity.Jobs;
+using Unity.Mathematics;
+using Unity.Transforms;
 
-//[UpdateAfter(typeof(MoveForwardSystem))]
-//[UpdateBefore(typeof(BulletCullingSystem))]
-//public class CollisionSystem : JobComponentSystem
-//{
-//	struct PlayerGroup
-//	{
-//		public readonly int Length;
-//		public ComponentDataArray<Health> health;
-//		public GameObjectArray playerObj;
-//		public ComponentDataArray<PlayerTag> tag;
-//	}
+[UpdateAfter(typeof(MoveForwardSystem))]
+[UpdateBefore(typeof(BulletCullingSystem))]
+public class CollisionSystem : JobComponentSystem
+{
+	EntityQuery enemyGroup;
+	EntityQuery bulletGroup;
+	EntityQuery playerGroup;
 
-//	struct EnemyGroup
-//	{
-//		public readonly int Length;
-//		public ComponentDataArray<Health> health;
-//		public ComponentDataArray<Translation> position;
-//		public ComponentDataArray<EnemyTag> tag;
-//	}
+	protected override void OnCreate()
+	{
+		playerGroup = GetEntityQuery(typeof(Health), ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<PlayerTag>());
+		enemyGroup = GetEntityQuery(typeof(Health), ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<EnemyTag>());
+		bulletGroup = GetEntityQuery(typeof(TimeToLive), ComponentType.ReadOnly<Translation>());
+	}
 
-//	struct BulletGroup
-//	{
-//		public ComponentDataArray<TimeToLive> bullet;
-//		public ComponentDataArray<Translation> position;
-//	}
+	[BurstCompile]
+	struct CollisionJob : IJobChunk
+	{
+		public float radius;
 
-//	[Inject] PlayerGroup player;
-//	[Inject] EnemyGroup enemies;
-//	[Inject] BulletGroup bullets;
+		public ArchetypeChunkComponentType<Health> healthType;
+		[ReadOnly] public ArchetypeChunkComponentType<Translation> translationType;
+
+		[DeallocateOnJobCompletion]
+		[ReadOnly] public NativeArray<Translation> transToTestAgainst;
 
 
-//	[BurstCompile]
-//	struct BulletsVersusEnemies : IJobParallelFor
-//	{
-//		public float radius;
-//		public ComponentDataArray<Health> enemyHealth;
-//		[ReadOnly] public ComponentDataArray<Translation> enemyPos;
-//		[ReadOnly] public ComponentDataArray<Translation> bulletPos;
-//		[NativeDisableParallelForRestriction]
-//		public ComponentDataArray<TimeToLive> bullets;
+		public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
+		{
+			var chunkHealths = chunk.GetNativeArray(healthType);
+			var chunkTranslations = chunk.GetNativeArray(translationType);
 
+			for (int i = 0; i < chunk.Count; i++)
+			{
+				float damage = 0f;
+				Health health = chunkHealths[i];
+				Translation pos = chunkTranslations[i];
 
-//		public void Execute(int eI)
-//		{
-//			float damage = 0f;
+				for (int j = 0; j < transToTestAgainst.Length; j++)
+				{
+					Translation pos2 = transToTestAgainst[j];
 
-//			for (int bI = 0; bI < bullets.Length; bI++)
-//			{
-//				if (CheckCollision(enemyPos[eI].Value, bulletPos[bI].Value, radius))
-//				{
-//					bullets[bI] = new TimeToLive { Value = 0f };
-//					damage += 1;
-//				}
-//			}
-//			if (damage > 0)
-//			{
-//				Health thisHealth = enemyHealth[eI];
-//				thisHealth.Value -= damage;
-//				enemyHealth[eI] = thisHealth;
-//			}
-//		}
-//	}
+					if(CheckCollision(pos.Value, pos2.Value, radius))
+						damage += 1;
+				}
 
-//	[BurstCompile]
-//	struct EnemiesVersusPlayer : IJob
-//	{
-//		public float radius;
+				if (damage > 0)
+				{
+					health.Value -= damage;
+					chunkHealths[i] = health;
+				}
+			}
+		}
+	}
 
-//		public float3 playerPos;
-//		public ComponentDataArray<Health> playerHealth;
-//		[ReadOnly] public ComponentDataArray<Translation> enemyPos;
+	protected override JobHandle OnUpdate(JobHandle inputDependencies)
+	{
+		var healthType = GetArchetypeChunkComponentType<Health>(false);
+		var translationType = GetArchetypeChunkComponentType<Translation>(true);
 
+		float enemyRadius = Settings.main.enemyCollisionRadius;
+		float playerRadius = Settings.main.playerCollisionRadius;
 
-//		public void Execute()
-//		{
-//			float damage = 0f;
+		var jobEvB = new CollisionJob()
+		{
+			radius = enemyRadius * enemyRadius,
+			healthType = healthType,
+			translationType = translationType,
+			transToTestAgainst = bulletGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
+		};
 
-//			for (int eIndex = 0; eIndex < enemyPos.Length; eIndex++)
-//			{
-//				if (CheckCollision(playerPos, enemyPos[eIndex].Value, radius))
-//					damage += 1;
-//			}
+		JobHandle jobHandle = jobEvB.Schedule(enemyGroup, inputDependencies);
 
-//			if (damage > 0)
-//			{
-//				playerHealth[0] = new Health { Value = 0f };
-//			}
-//		}
-//	}
+		if (Settings.main.player == null)
+			return jobHandle;
 
-//	protected override JobHandle OnUpdate(JobHandle inputDeps)
-//	{
-//		float enemyRadius = Settings.main.enemyCollisionRadius;
-//		float playerRadius = Settings.main.playerCollisionRadius;
+		var jobPvE = new CollisionJob()
+		{
+			radius = playerRadius * playerRadius,
+			healthType = healthType,
+			translationType = translationType,
+			transToTestAgainst = enemyGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
+		};
 
-//		BulletsVersusEnemies beJob = new BulletsVersusEnemies
-//		{
-//			radius = enemyRadius * enemyRadius,
-//			enemyHealth = enemies.health,
-//			enemyPos = enemies.position,
-//			bulletPos = bullets.position,
-//			bullets = bullets.bullet
-//		};
+		return jobPvE.Schedule(playerGroup, jobHandle);
+	}
 
-//		JobHandle beHandle = beJob.Schedule(enemies.Length, 1, inputDeps);
+	static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
+	{
+		float3 delta = posA - posB;
+		float distanceSquare = delta.x * delta.x + delta.z * delta.z;
 
-//		if (player.Length <= 0)
-//			return beHandle;
-
-
-//		EnemiesVersusPlayer epJob = new EnemiesVersusPlayer
-//		{
-//			radius = playerRadius * playerRadius,
-//			playerPos = player.playerObj[0].transform.position,
-//			playerHealth = player.health,
-//			enemyPos = enemies.position
-//		};
-
-//		return epJob.Schedule(beHandle);
-//	}
-
-//	static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
-//	{
-//		float3 delta = posA - posB;
-//		float distanceSquare = delta.x * delta.x + delta.z * delta.z;
-
-//		return distanceSquare <= radiusSqr;
-//	}
-//}
+		return distanceSquare <= radiusSqr;
+	}
+}

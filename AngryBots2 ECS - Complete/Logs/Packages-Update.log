@@ -24,3 +24,15 @@ The following packages were updated:
   com.unity.analytics from version 3.2.2 to 3.3.2
   com.unity.package-manager-ui from version 2.0.4 to 2.1.1
   com.unity.render-pipelines.lightweight from version 4.1.0-preview to 5.6.1
+
+=== Tue Apr 16 09:09:24 2019
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.collab-proxy from version 1.2.15 to 1.2.16
+  com.unity.package-manager-ui from version 2.1.1 to 2.1.2
+  com.unity.purchasing from version 2.0.3 to 2.0.6
+  com.unity.render-pipelines.lightweight from version 5.6.1 to 5.7.2
+  com.unity.xr.legacyinputhelpers from version 1.0.0 to 2.0.2

@@ -1,61 +1,63 @@
-﻿using Unity.Collections;
-using Unity.Entities;
-using Unity.Rendering;
-using Unity.Transforms;
-using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
+﻿//using Unity.Collections;
+//using Unity.Entities;
+//using Unity.Transforms;
+//using UnityEngine;
+//using UnityEngine.Experimental.PlayerLoop;
 
-[UpdateAfter(typeof(Initialization))]
-public class EnemySpawnSystem : ComponentSystem
-{
-	EntityQuery spawnerGroup;
+//[UpdateAfter(typeof(Initialization))]
+//public class EnemySpawnSystem : ComponentSystem
+//{
+//	EntityQuery spawnerGroup;
 
-	protected override void OnCreateManager()
-	{
-		spawnerGroup = GetEntityQuery(typeof(Spawner));
-	}
+//	protected override void OnCreateManager()
+//	{
+//		spawnerGroup = GetEntityQuery(typeof(Spawner));
+//	}
 
-	protected override void OnUpdate()
-	{
-		if (Settings.main.player == null || !Settings.main.spawnEnemies)
-			return;
+//	protected override void OnUpdate()
+//	{
+//		if (Settings.main.player == null || !Settings.main.spawnEnemies)
+//			return;
 
-		using (var spawnerEntityArray = spawnerGroup.ToEntityArray(Allocator.TempJob))
-		{
-			foreach (var spawnerEntity in spawnerEntityArray)
-			{
-				Spawner spawner = EntityManager.GetSharedComponentData<Spawner>(spawnerEntity);
+//		using (var spawnerEntityArray = spawnerGroup.ToEntityArray(Allocator.TempJob))
+//		{
+//			foreach (var spawnerEntity in spawnerEntityArray)
+//			{
+//				Spawner spawner = EntityManager.GetSharedComponentData<Spawner>(spawnerEntity);
 
-				spawner.cooldown -= Time.deltaTime;
+//				spawner.cooldown -= Time.deltaTime;
 
-				if (spawner.cooldown <= 0f)
-				{
-					spawner.cooldown = Settings.main.enemySpawnRate;
+//				if (spawner.cooldown <= 0f)
+//				{
+//					spawner.cooldown = Settings.main.enemySpawnRate;
 
-					Entity enemyEntity = EntityManager.Instantiate(spawner.prefab);
-					EntityManager.SetComponentData(enemyEntity, new Translation { Value = Settings.GetPositionAroundPlayer() });
-				}
+//					Entity enemyEntity = EntityManager.Instantiate(spawner.prefab);
+//					EntityManager.SetComponentData(enemyEntity, new Translation { Value = Settings.GetPositionAroundPlayer() });
+//				}
 
-				EntityManager.SetSharedComponentData(spawnerEntity, spawner);
-			}
-		}
-	}
-}
+//				EntityManager.SetSharedComponentData(spawnerEntity, spawner);
+//			}
+//		}
+//	}
+//}
 
-public static class EnemySpawnBootstrapper
-{
-	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-	public static void Initialize()
-	{
-		EntityManager manager = World.Active.GetOrCreateSystem<EntityManager>();
-		GameObject proto = Settings.main.enemyPrototype;
+//public static class EnemySpawnBootstrapper
+//{
+//	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+//	public static void Initialize()
+//	{
+//		EntityManager manager = World.Active.EntityManager;
+//		GameObject proto = Settings.main.enemyPrototype;
 
-		//Setup spawner
-		EntityArchetype spawnArch = manager.CreateArchetype(typeof(Spawner));
+//		//Setup spawner
+//		EntityArchetype spawnArch = manager.CreateArchetype(typeof(Spawner));
 
-		Entity spawner = manager.CreateEntity(spawnArch);
+//		Entity spawner = manager.CreateEntity(spawnArch);
 
-		manager.SetSharedComponentData(spawner, new Spawner { cooldown = 0f,
-														prefab = proto});
-	}
-}
+//		manager.SetSharedComponentData(spawner, new Spawner
+//		{
+//			cooldown = 0f,
+//			prefab = proto
+//		});
+//	}
+//}

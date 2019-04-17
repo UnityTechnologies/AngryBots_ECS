@@ -11,7 +11,7 @@ public class TurnTowardsPlayerSystem : JobComponentSystem
 {
 	[BurstCompile]
 	[RequireComponentTag(typeof(EnemyTag))]
-	struct TurnTowardsPlayerJob : IJobProcessComponentData<Translation, Rotation>
+	struct TurnTowardsPlayerJob : IJobForEach<Translation, Rotation>
 	{
 		public float3 playerPosition; 
 		public float dt;
