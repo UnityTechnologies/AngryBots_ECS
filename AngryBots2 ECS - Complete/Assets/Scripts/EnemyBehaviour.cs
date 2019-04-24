@@ -39,7 +39,7 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 			Instantiate(Settings.main.bulletHitPrefab, transform.position, Quaternion.identity);
 
 			var playerMove = theCollider.GetComponent<PlayerMovementAndLook>();
-			playerMove?.CollidedWithEnemy();
+			playerMove?.PlayerDied();
 		}
 	}
 

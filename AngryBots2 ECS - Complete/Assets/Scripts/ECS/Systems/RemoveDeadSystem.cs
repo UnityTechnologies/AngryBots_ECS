@@ -4,7 +4,7 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Experimental.PlayerLoop;
 
-[UpdateAfter(typeof(CollisionSystem))]
+[UpdateBefore(typeof(Initialization))]
 public class RemoveDeadSystem : ComponentSystem
 {
 	EntityQuery enemyGroup;
@@ -18,38 +18,28 @@ public class RemoveDeadSystem : ComponentSystem
 
 	protected override void OnUpdate()
 	{
+		Entities.ForEach((Entity entity, ref Health health, ref Translation pos) =>
+		{
+			if (EntityManager.HasComponent(entity, typeof(PlayerTag)))
+			{
+				Debug.Log(pos.Value);
+			}
 
-		//Entities.ForEach((Entity e, Health playerHealth ) =>
-		//{
-		//	int toSpawnCount = spawner.Count;
+			if (health.Value <= 0)
+			{
+				if (EntityManager.HasComponent(entity, typeof(PlayerTag)))
+				{
+					Settings.main.PlayerDied();
+				}
 
-		//	var spawnPositions = new NativeArray<float3>(toSpawnCount, Allocator.TempJob);
-		//	GeneratePoints.RandomPointsInUnitSphere(spawnPositions);
+				else if (EntityManager.HasComponent(entity, typeof(EnemyTag)))
+				{
+					PostUpdateCommands.DestroyEntity(entity);
+					GameObject.Instantiate(Settings.main.bulletHitPrefab, pos.Value, Quaternion.identity);
+				}
+			}
 
-		//	// Calling Instantiate once per spawned Entity is rather slow, and not recommended
-		//	// This code is placeholder until we add the ability to bulk-instantiate many entities from an ECB
-		//	var entities = new NativeArray<Entity>(toSpawnCount, Allocator.Temp);
-		//	for (int i = 0; i < toSpawnCount; ++i)
-		//	{
-		//		entities[i] = PostUpdateCommands.Instantiate(spawner.Prefab);
-		//	}
-
-		//	for (int i = 0; i < toSpawnCount; i++)
-		//	{
-		//		PostUpdateCommands.SetComponent(entities[i], new LocalToWorld
-		//		{
-		//			Value = float4x4.TRS(
-		//				localToWorld.Position + (spawnPositions[i] * spawner.Radius),
-		//				quaternion.LookRotationSafe(spawnPositions[i], math.up()),
-		//				new float3(1.0f, 1.0f, 1.0f))
-		//		});
-		//	}
-
-		//	PostUpdateCommands.RemoveComponent<SpawnRandomInSphere>(e);
-
-		//	spawnPositions.Dispose();
-		//	entities.Dispose();
-		//});
+		});
 
 		//using (var playerEntityArray = playerGroup.ToEntityArray(Allocator.TempJob))
 		//{
@@ -63,22 +53,22 @@ public class RemoveDeadSystem : ComponentSystem
 		//	}
 		//}
 
-		using (var enemyEntityArray = enemyGroup.ToEntityArray(Allocator.TempJob))
-		{
-			foreach (var enemyEntity in enemyEntityArray)
-			{
-				var enemyHealth = EntityManager.GetComponentData<Health>(enemyEntity);
-				var enemyTranslation = EntityManager.GetComponentData<Translation>(enemyEntity);
+		//using (var enemyEntityArray = enemyGroup.ToEntityArray(Allocator.TempJob))
+		//{
+		//	foreach (var enemyEntity in enemyEntityArray)
+		//	{
+		//		var enemyHealth = EntityManager.GetComponentData<Health>(enemyEntity);
+		//		var enemyTranslation = EntityManager.GetComponentData<Translation>(enemyEntity);
 
-				if (enemyHealth.Value <= 0f)
-				{
-					Vector3 position = enemyTranslation.Value;
-					PostUpdateCommands.DestroyEntity(enemyEntity);
+		//		if (enemyHealth.Value <= 0f)
+		//		{
+		//			Vector3 position = enemyTranslation.Value;
+		//			PostUpdateCommands.DestroyEntity(enemyEntity);
 
-					GameObject.Instantiate(Settings.main.bulletHitPrefab, position, Quaternion.identity);
-				}
-			}
-		}
+		//			GameObject.Instantiate(Settings.main.bulletHitPrefab, position, Quaternion.identity);
+		//		}
+		//	}
+		//}
 	}
 }
 

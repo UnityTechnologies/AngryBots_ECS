@@ -47,8 +47,10 @@ public class CollisionSystem : JobComponentSystem
 				{
 					Translation pos2 = transToTestAgainst[j];
 
-					if(CheckCollision(pos.Value, pos2.Value, radius))
+					if (CheckCollision(pos.Value, pos2.Value, radius))
+					{
 						damage += 1;
+					}
 				}
 
 				if (damage > 0)

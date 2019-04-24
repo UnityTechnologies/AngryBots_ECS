@@ -24,6 +24,17 @@ public class Settings : MonoBehaviour
 			main = this;
 	}
 
+	public void PlayerDied()
+	{
+		if (player == null)
+			return;
+
+		PlayerMovementAndLook playerMove = player.GetComponent<PlayerMovementAndLook>();
+
+		player = null;
+		playerMove.PlayerDied();
+	}
+
 	public static Vector3 GetPositionAroundPlayer()
 	{
 		float radius = main.enemySpawnRadius;

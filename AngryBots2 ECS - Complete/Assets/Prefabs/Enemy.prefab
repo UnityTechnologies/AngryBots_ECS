@@ -107,7 +107,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.16
-  m_Height: 1.14
+  m_Height: 1
   m_Direction: 2
   m_Center: {x: 0.00000018626451, y: 0.06914486, z: 0.24}
 --- !u!114 &2114627309
@@ -123,4 +123,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  health: 1
+  enemyHealth: 1

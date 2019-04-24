@@ -32,10 +32,7 @@ public class PlayerMovementAndLook : MonoBehaviour
 	void FixedUpdate()
 	{
 		if (isDead)
-		{
-			Destroy(gameObject);
 			return;
-		}
 
 		//Arrow Key Input
 		float h = Input.GetAxis("Horizontal");
@@ -115,8 +112,13 @@ public class PlayerMovementAndLook : MonoBehaviour
 		playerAnimator.SetFloat("Strafe", stra);
 	}
 
-	public void CollidedWithEnemy()
+	public void PlayerDied()
 	{
+		if (isDead)
+			return;
+
 		isDead = true;
+
+		playerAnimator.SetTrigger("Died");
 	}
 }

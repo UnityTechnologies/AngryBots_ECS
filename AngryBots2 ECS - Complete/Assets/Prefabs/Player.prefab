@@ -18915,9 +18915,10 @@ GameObject:
   - component: {fileID: 95790324078749254}
   - component: {fileID: 114445215679820892}
   - component: {fileID: 114167452494013206}
-  - component: {fileID: 114984501018698222}
+  - component: {fileID: 1194508033}
+  - component: {fileID: 1194508039}
   m_Layer: 0
-  m_Name: Player_Completed
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19020,18 +19021,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c6ec7c1cfc23b4692af64881e419f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseECS: 1
+  useECS: 1
   spreadShot: 1
   gunBarrel: {fileID: 4129155176228248}
   shotVFX: {fileID: 198063976594163044}
   shotAudio: {fileID: 82777586598894398}
-  fireRate: 0.1
+  fireRate: 0.01
   spreadAmount: 20
   bulletPrefab: {fileID: 1218724716591446, guid: c4b4b81382c254a999d09f9375fbe2c7,
     type: 3}
-  bulletPrefabECS: {fileID: 1429872813718956, guid: 9a92c07d2d36f32459cc077b24f96609,
-    type: 3}
---- !u!114 &114984501018698222
+--- !u!114 &1194508033
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19040,9 +19039,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1500293480320252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bf10cdea1344482e91a4f2b58506b77, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ec78bfd5b542f7458d0678151af24ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthValue: 1
+--- !u!114 &1194508039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500293480320252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 1
 --- !u!1 &1502514446394330
 GameObject:
   m_ObjectHideFlags: 0

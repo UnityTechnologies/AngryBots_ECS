@@ -114,7 +114,7 @@ public class PlayerShooting : MonoBehaviour
 		Vector3 tempRot = rotation;
 		int index = 0;
 
-		NativeArray<Entity> bullets = new NativeArray<Entity>(totalAmount, Allocator.Temp);
+		NativeArray<Entity> bullets = new NativeArray<Entity>(totalAmount, Allocator.TempJob);
 		manager.Instantiate(bulletEntityPrefab, bullets);
 
 		for (int x = min; x < max; x++)
