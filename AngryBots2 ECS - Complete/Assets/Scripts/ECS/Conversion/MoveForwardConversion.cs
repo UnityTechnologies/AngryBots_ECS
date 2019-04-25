@@ -1,8 +1,7 @@
 ﻿using Unity.Entities;
 using UnityEngine;
 
-
-public class MoveForwardProxy : MonoBehaviour, IConvertGameObjectToEntity
+public class MoveForwardConversion : MonoBehaviour, IConvertGameObjectToEntity
 {
 	public float speed = 50f;
 

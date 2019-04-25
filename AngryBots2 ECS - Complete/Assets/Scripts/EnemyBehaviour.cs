@@ -10,36 +10,36 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 	[Header("Life Settings")]
 	public float enemyHealth = 1f;
 
-	Rigidbody enemyRigidbody;
+	Rigidbody rigidBody;
 
 
 	void Start()
 	{
-		enemyRigidbody = GetComponent<Rigidbody>();
+		rigidBody = GetComponent<Rigidbody>();
 	}
 
 	void Update()
 	{
-		if (Settings.main.player != null)
+		if (!Settings.IsPlayerDead())
 		{
-			Vector3 heading = Settings.main.player.position - transform.position;
+			Vector3 heading = Settings.PlayerPosition - transform.position;
 			heading.y = 0f;
 			transform.rotation = Quaternion.LookRotation(heading);
 		}
 
 		Vector3 movement = transform.forward * speed * Time.deltaTime;
-		enemyRigidbody.MovePosition(transform.position + movement);
+		rigidBody.MovePosition(transform.position + movement);
 	}
 
 	void OnTriggerEnter(Collider theCollider)
 	{
-		if (theCollider.CompareTag("Player") || theCollider.CompareTag("Bullet"))
+		if (!theCollider.CompareTag("Bullet"))
+			return;
+
+		if(--enemyHealth <= 0)
 		{
 			Destroy(gameObject);
-			Instantiate(Settings.main.bulletHitPrefab, transform.position, Quaternion.identity);
-
-			var playerMove = theCollider.GetComponent<PlayerMovementAndLook>();
-			playerMove?.PlayerDied();
+			BulletImpactPool.PlayBulletImpact(transform.position);
 		}
 	}
 

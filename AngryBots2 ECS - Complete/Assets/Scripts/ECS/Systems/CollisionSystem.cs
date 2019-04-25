@@ -67,8 +67,8 @@ public class CollisionSystem : JobComponentSystem
 		var healthType = GetArchetypeChunkComponentType<Health>(false);
 		var translationType = GetArchetypeChunkComponentType<Translation>(true);
 
-		float enemyRadius = Settings.main.enemyCollisionRadius;
-		float playerRadius = Settings.main.playerCollisionRadius;
+		float enemyRadius = Settings.EnemyCollisionRadius;
+		float playerRadius = Settings.PlayerCollisionRadius;
 
 		var jobEvB = new CollisionJob()
 		{
@@ -80,7 +80,7 @@ public class CollisionSystem : JobComponentSystem
 
 		JobHandle jobHandle = jobEvB.Schedule(enemyGroup, inputDependencies);
 
-		if (Settings.main.player == null)
+		if (Settings.IsPlayerDead())
 			return jobHandle;
 
 		var jobPvE = new CollisionJob()

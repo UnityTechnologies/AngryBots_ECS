@@ -7,13 +7,17 @@ public class EnemySpawner : MonoBehaviour
 	[Header("Enemy Spawn Info")]
 	public bool spawnEnemies = true;
 	public bool useECS = false;
-	public float enemySpawnCount = 1f;
+	public float enemySpawnRadius = 10f;
 	public GameObject enemyPrefab;
 
-	float spawnInterval = 1f;
-	float cooldown;
+	[Header("Enemy Spawn Timing")]
+	[Range(1, 100)] public int spawnsPerInterval = 1;
+	[Range(.1f, 2f)] public float spawnInterval = 1f;
+	
 	EntityManager manager;
 	Entity enemyEntityPrefab;
+
+	float cooldown;
 
 
 	void Start()
@@ -27,7 +31,7 @@ public class EnemySpawner : MonoBehaviour
 
 	void Update()
     {
-		if (!spawnEnemies || Settings.main.player == null)
+		if (!spawnEnemies || Settings.IsPlayerDead())
 			return;
 
 		cooldown -= Time.deltaTime;
@@ -41,9 +45,9 @@ public class EnemySpawner : MonoBehaviour
 
 	void Spawn()
 	{
-		for (int i = 0; i < enemySpawnCount; i++)
+		for (int i = 0; i < spawnsPerInterval; i++)
 		{
-			Vector3 pos = Settings.GetPositionAroundPlayer();
+			Vector3 pos = Settings.GetPositionAroundPlayer(enemySpawnRadius);
 
 			if (!useECS)
 			{

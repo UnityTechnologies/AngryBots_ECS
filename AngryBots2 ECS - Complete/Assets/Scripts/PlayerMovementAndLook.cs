@@ -6,27 +6,21 @@ public class PlayerMovementAndLook : MonoBehaviour
 	public Camera mainCamera;
 
 	[Header("Movement")]
-	public Rigidbody playerRigidbody;
-	public float speed = 4.5f;	
+	public float speed = 4.5f;
+	public LayerMask whatIsGround;
+
+	[Header("Life Settings")]
+	public float playerHealth = 1f;
 
 	[Header("Animation")]
 	public Animator playerAnimator;
 
-	Plane playerMovementPlane;
-	RaycastHit floorRaycastHit;
-	Vector3 playerToMouse;
-	Vector3 inputDirection;
-	Vector3 movement;
+	Rigidbody playerRigidbody;
 	bool isDead;
 
 	void Awake()
 	{
-		CreatePlayerMovementPlane();
-	}
-
-	void CreatePlayerMovementPlane()
-	{
-		playerMovementPlane = new Plane (transform.up, transform.position + transform.up);
+		playerRigidbody = GetComponent<Rigidbody>();
 	}
 
 	void FixedUpdate()
@@ -38,7 +32,7 @@ public class PlayerMovementAndLook : MonoBehaviour
 		float h = Input.GetAxis("Horizontal");
 		float v = Input.GetAxis("Vertical");
 
-		inputDirection = new Vector3(h, 0, v);
+		Vector3 inputDirection = new Vector3(h, 0, v);
 
 		//Camera Direction
 		var cameraForward = mainCamera.transform.forward;
@@ -59,45 +53,27 @@ public class PlayerMovementAndLook : MonoBehaviour
 
 	void MoveThePlayer(Vector3 desiredDirection)
 	{
-		movement.Set(desiredDirection.x, 0f, desiredDirection.z);
-
+		Vector3 movement = new Vector3(desiredDirection.x, 0f, desiredDirection.z);
 		movement = movement.normalized * speed * Time.deltaTime;
 
 		playerRigidbody.MovePosition(transform.position + movement);
-
 	}
 
 	void TurnThePlayer()
 	{
-		Vector3 cursorScreenPosition = Input.mousePosition;
+		Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
 
-		Vector3 cursorWorldPosition = ScreenPointToWorldPointOnPlane(cursorScreenPosition, playerMovementPlane, mainCamera);
+		if (Physics.Raycast(ray, out hit, whatIsGround))
+		{
+			Vector3 playerToMouse = hit.point - transform.position;
+			playerToMouse.y = 0f;
+			playerToMouse.Normalize();
 
-		playerToMouse = cursorWorldPosition - transform.position;
-
-		playerToMouse.y = 0f;
-
-		playerToMouse.Normalize();
-
-		Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
-
-		playerRigidbody.MoveRotation(newRotation);
-
+			Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+			playerRigidbody.MoveRotation(newRotation);
+		}
 	}
-
-	Vector3 PlaneRayIntersection(Plane plane, Ray ray)
-	{
-		float dist = 0.0f;
-		plane.Raycast(ray, out dist);
-		return ray.GetPoint(dist);
-	}
-
-	Vector3 ScreenPointToWorldPointOnPlane(Vector3 screenPoint, Plane plane, Camera camera)
-	{	
-		Ray ray = camera.ScreenPointToRay(screenPoint);
-		return PlaneRayIntersection(plane, ray);
-	}
-
 
 	void AnimateThePlayer(Vector3 desiredDirection)
 	{
@@ -112,6 +88,17 @@ public class PlayerMovementAndLook : MonoBehaviour
 		playerAnimator.SetFloat("Strafe", stra);
 	}
 
+	void OnTriggerEnter(Collider theCollider)
+	{
+		if (!theCollider.CompareTag("Enemy"))
+			return;
+
+		if(--playerHealth <= 0)
+		{
+			Settings.PlayerDied();
+		}
+	}
+
 	public void PlayerDied()
 	{
 		if (isDead)
@@ -120,5 +107,7 @@ public class PlayerMovementAndLook : MonoBehaviour
 		isDead = true;
 
 		playerAnimator.SetTrigger("Died");
+		playerRigidbody.isKinematic = true;
+		GetComponent<Collider>().enabled = false;
 	}
 }

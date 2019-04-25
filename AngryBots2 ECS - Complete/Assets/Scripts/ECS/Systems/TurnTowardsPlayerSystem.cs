@@ -26,12 +26,12 @@ public class TurnTowardsPlayerSystem : JobComponentSystem
 
 	protected override JobHandle OnUpdate(JobHandle inputDeps)
 	{
-		if (Settings.main.player == null)
+		if (Settings.IsPlayerDead())
 			return inputDeps;
 		
 		var job = new TurnTowardsPlayerJob
 		{
-			playerPosition = Settings.main.player.position,
+			playerPosition = Settings.PlayerPosition,
 			dt = Time.deltaTime
 		};
 

@@ -177,7 +177,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 220979866}
-  m_LocalRotation: {x: 0.1724006, y: 0.82731766, z: -0.38972017, w: 0.36598048}
+  m_LocalRotation: {x: 0.17240062, y: 0.82731766, z: -0.38972014, w: 0.36598057}
   m_LocalPosition: {x: -8.095254, y: 5.072219, z: 4.8838463}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -264,9 +264,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 402024086}
-  bulletHitPrefab: {fileID: 1607228222434220, guid: 3c6a9770554a2499da6dc5e68b870e15,
-    type: 3}
-  enemySpawnRadius: 17
   playerCollisionRadius: 0.8
   enemyCollisionRadius: 0.8
 --- !u!4 &427756557
@@ -469,10 +466,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnEnemies: 1
-  useECS: 1
-  enemySpawnCount: 1
+  useECS: 0
+  enemySpawnRadius: 17
   enemyPrefab: {fileID: 40720117310684751, guid: 0e3f83bdd0786fc418e17d7be7fd67a3,
     type: 3}
+  spawnsPerInterval: 1
+  spawnInterval: 1
 --- !u!1001 &1142627572
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -533,6 +532,11 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 1496275639}
+    - target: {fileID: 114445215679820892, guid: 387be402c6e254edb8f04a699355f406,
+        type: 3}
+      propertyPath: whatIsGround.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
     - target: {fileID: 114167452494013206, guid: 387be402c6e254edb8f04a699355f406,
         type: 3}
       propertyPath: bulletPrefab
@@ -553,6 +557,16 @@ PrefabInstance:
         type: 3}
       propertyPath: spreadShot
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114167452494013206, guid: 387be402c6e254edb8f04a699355f406,
+        type: 3}
+      propertyPath: useECS
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 136433486275610172, guid: 387be402c6e254edb8f04a699355f406,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 1.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 387be402c6e254edb8f04a699355f406, type: 3}
@@ -648,6 +662,52 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 15.4
+--- !u!1 &1415310047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1415310049}
+  - component: {fileID: 1415310048}
+  m_Layer: 0
+  m_Name: Bullet Impact Object Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1415310048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415310047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caa9c1b965593a04b97699021e55094b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHitPrefab: {fileID: 1607228222434220, guid: 3c6a9770554a2499da6dc5e68b870e15,
+    type: 3}
+  impactPoolSize: 100
+--- !u!4 &1415310049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415310047}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1457675941
 GameObject:
   m_ObjectHideFlags: 3
@@ -829,7 +889,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1496275636}
-  m_LocalRotation: {x: 0.1724006, y: 0.82731766, z: -0.38972017, w: 0.36598048}
+  m_LocalRotation: {x: 0.17240062, y: 0.82731766, z: -0.38972014, w: 0.36598057}
   m_LocalPosition: {x: -8.095254, y: 5.072219, z: 4.8838463}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
