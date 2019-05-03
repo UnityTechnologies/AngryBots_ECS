@@ -14,7 +14,6 @@ public class TurnTowardsPlayerSystem : JobComponentSystem
 	struct TurnJob : IJobForEach<Translation, Rotation>
 	{
 		public float3 playerPosition; 
-		public float dt;
 
 		public void Execute([ReadOnly] ref Translation pos, ref Rotation rot)
 		{
@@ -28,11 +27,10 @@ public class TurnTowardsPlayerSystem : JobComponentSystem
 	{
 		if (Settings.IsPlayerDead())
 			return inputDeps;
-		
+
 		var job = new TurnJob
 		{
-			playerPosition = Settings.PlayerPosition,
-			dt = Time.deltaTime
+			playerPosition = Settings.PlayerPosition
 		};
 
 		return job.Schedule(this, inputDeps);
