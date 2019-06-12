@@ -466,7 +466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnEnemies: 1
-  useECS: 0
+  useECS: 1
   enemySpawnRadius: 17
   enemyPrefab: {fileID: 40720117310684751, guid: 0e3f83bdd0786fc418e17d7be7fd67a3,
     type: 3}
@@ -561,7 +561,7 @@ PrefabInstance:
     - target: {fileID: 114167452494013206, guid: 387be402c6e254edb8f04a699355f406,
         type: 3}
       propertyPath: useECS
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 136433486275610172, guid: 387be402c6e254edb8f04a699355f406,
         type: 3}
