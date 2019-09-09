@@ -94,8 +94,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 112000002, guid: d235646aaa0510e46bd9ad6cd956ac82,
     type: 2}
   m_UseShadowmask: 0
@@ -177,7 +177,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 220979866}
-  m_LocalRotation: {x: 0.1724006, y: 0.82731766, z: -0.38972017, w: 0.36598048}
+  m_LocalRotation: {x: 0.1724006, y: 0.8273177, z: -0.3897202, w: 0.36598048}
   m_LocalPosition: {x: -8.095254, y: 5.072219, z: 4.8838463}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -338,6 +338,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -556,7 +557,7 @@ PrefabInstance:
     - target: {fileID: 114167452494013206, guid: 387be402c6e254edb8f04a699355f406,
         type: 3}
       propertyPath: spreadShot
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114167452494013206, guid: 387be402c6e254edb8f04a699355f406,
         type: 3}
@@ -893,7 +894,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1496275636}
-  m_LocalRotation: {x: 0.1724006, y: 0.82731766, z: -0.38972017, w: 0.36598048}
+  m_LocalRotation: {x: 0.1724006, y: 0.8273177, z: -0.3897202, w: 0.36598048}
   m_LocalPosition: {x: -8.095254, y: 5.072219, z: 4.8838463}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []

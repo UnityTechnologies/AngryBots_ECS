@@ -31,12 +31,15 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		rigidBody.MovePosition(transform.position + movement);
 	}
 
+	//Enemy Collision
 	void OnTriggerEnter(Collider theCollider)
 	{
 		if (!theCollider.CompareTag("Bullet"))
 			return;
 
-		if(--enemyHealth <= 0)
+		enemyHealth--;
+
+		if(enemyHealth <= 0)
 		{
 			Destroy(gameObject);
 			BulletImpactPool.PlayBulletImpact(transform.position);

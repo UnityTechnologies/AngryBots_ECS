@@ -88,12 +88,15 @@ public class PlayerMovementAndLook : MonoBehaviour
 		playerAnimator.SetFloat("Strafe", stra);
 	}
 
+	//Player Collision
 	void OnTriggerEnter(Collider theCollider)
 	{
 		if (!theCollider.CompareTag("Enemy"))
 			return;
 
-		if(--playerHealth <= 0)
+		playerHealth--;
+
+		if(playerHealth <= 0)
 		{
 			Settings.PlayerDied();
 		}
