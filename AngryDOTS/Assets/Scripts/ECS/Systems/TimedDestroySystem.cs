@@ -9,7 +9,7 @@ public class TimedDestroySystem : JobComponentSystem
 {
 	EndSimulationEntityCommandBufferSystem buffer;
 
-	protected override void OnCreateManager()
+	protected override void OnCreate()
 	{
 		buffer = World.Active.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 	}
