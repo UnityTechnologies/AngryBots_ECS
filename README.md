@@ -1,5 +1,5 @@
 # AngryBots ECS
-The DOTS project used for the presentation Converting Your Game to DOTS and contains an example of how DOTS could be used to replace a low performance process in your games (shooting many bullets at once, in this case). This is meant to provide a simple, targeted example. A video presentation of this project can be seen [here](https://www.youtube.com/watch?v=QbnVELXf5RQ)
+The DOTS project used for the presentation Converting Your Game to DOTS and contains an example of how DOTS could be used to replace a low performance process in your games (shooting many bullets at once, in this case). This is meant to provide a simple, targeted example. A video presentation of this project can be seen [here](https://www.youtube.com/watch?v=BNMrevfB6Q0)
 
 ## The basics
 This project uses a combination of game objects and entities together. In this case, the player (game objets) spawns bullets (entity). There is an Enemy Spawner (game object) that spawns enemies (entities). When enemies die, they spawn particle effects (game objects). 
