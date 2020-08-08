@@ -25,7 +25,7 @@ namespace Unity.Transforms
 		{
 			var moveForwardRotationJob = new MoveForwardRotation
 			{
-				dt = Time.deltaTime
+				dt = Time.DeltaTime
 			};
 
 			return moveForwardRotationJob.Schedule(this, inputDeps);
