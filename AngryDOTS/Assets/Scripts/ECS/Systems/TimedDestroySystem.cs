@@ -1,44 +1,44 @@
 ﻿using Unity.Entities;
 using Unity.Jobs;
-using Unity.Transforms;
-using UnityEngine;
 
-
-[UpdateAfter(typeof(MoveForwardSystem))]
-public class TimedDestroySystem : JobComponentSystem
+namespace ECS.Systems
 {
-	EndSimulationEntityCommandBufferSystem buffer;
-
-	protected override void OnCreateManager()
+	[UpdateAfter(typeof(MoveForwardSystem))]
+	public class TimedDestroySystem : JobComponentSystem
 	{
-		buffer = World.Active.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-	}
+		EndSimulationEntityCommandBufferSystem buffer;
 
-	struct CullingJob : IJobForEachWithEntity<TimeToLive>
-	{
-		public EntityCommandBuffer.Concurrent commands;
-		public float dt;
-
-		public void Execute(Entity entity, int jobIndex, ref TimeToLive timeToLive)
+		protected override void OnCreate()
 		{
-			timeToLive.Value -= dt;
-			if (timeToLive.Value <= 0f)
-				commands.DestroyEntity(jobIndex, entity);
+			buffer = World.DefaultGameObjectInjectionWorld.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 		}
-	}
 
-	protected override JobHandle OnUpdate(JobHandle inputDeps)
-	{
-		var job = new CullingJob
+		struct CullingJob : IJobForEachWithEntity<TimeToLive>
 		{
-			commands = buffer.CreateCommandBuffer().ToConcurrent(),
-			dt = Time.deltaTime
-		};
+			public EntityCommandBuffer.Concurrent commands;
+			public float dt;
 
-		var handle = job.Schedule(this, inputDeps);
-		buffer.AddJobHandleForProducer(handle);
+			public void Execute(Entity entity, int jobIndex, ref TimeToLive timeToLive)
+			{
+				timeToLive.Value -= dt;
+				if (timeToLive.Value <= 0f)
+					commands.DestroyEntity(jobIndex, entity);
+			}
+		}
 
-		return handle;
+		protected override JobHandle OnUpdate(JobHandle inputDeps)
+		{
+			var job = new CullingJob
+			{
+				commands = buffer.CreateCommandBuffer().ToConcurrent(),
+				dt = UnityEngine.Time.deltaTime
+			};
+
+			var handle = job.Schedule(this, inputDeps);
+			buffer.AddJobHandleForProducer(handle);
+
+			return handle;
+		}
 	}
 }
 
