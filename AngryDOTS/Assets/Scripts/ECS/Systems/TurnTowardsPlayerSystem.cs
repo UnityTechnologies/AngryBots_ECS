@@ -4,36 +4,38 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
-[UpdateBefore(typeof(MoveForwardSystem))]
-public class TurnTowardsPlayerSystem : JobComponentSystem
+namespace ECS.Systems
 {
-	[BurstCompile]
-	[RequireComponentTag(typeof(EnemyTag))]
-	struct TurnJob : IJobForEach<Translation, Rotation>
+	[UpdateBefore(typeof(MoveForwardSystem))]
+	public class TurnTowardsPlayerSystem : JobComponentSystem
 	{
-		public float3 playerPosition; 
-
-		public void Execute([ReadOnly] ref Translation pos, ref Rotation rot)
+		[BurstCompile]
+		[RequireComponentTag(typeof(EnemyTag))]
+		struct TurnJob : IJobForEach<Translation, Rotation>
 		{
-			float3 heading = playerPosition - pos.Value;
-			heading.y = 0f;
-			rot.Value = quaternion.LookRotation(heading, math.up());
+			public float3 playerPosition; 
+
+			public void Execute([ReadOnly] ref Translation pos, ref Rotation rot)
+			{
+				float3 heading = playerPosition - pos.Value;
+				heading.y = 0f;
+				rot.Value = quaternion.LookRotation(heading, math.up());
+			}
 		}
-	}
 
-	protected override JobHandle OnUpdate(JobHandle inputDeps)
-	{
-		if (Settings.IsPlayerDead())
-			return inputDeps;
-
-		var job = new TurnJob
+		protected override JobHandle OnUpdate(JobHandle inputDeps)
 		{
-			playerPosition = Settings.PlayerPosition
-		};
+			if (Settings.IsPlayerDead())
+				return inputDeps;
 
-		return job.Schedule(this, inputDeps);
+			var job = new TurnJob
+			{
+				playerPosition = Settings.PlayerPosition
+			};
+
+			return job.Schedule(this, inputDeps);
+		}
 	}
 }
 
