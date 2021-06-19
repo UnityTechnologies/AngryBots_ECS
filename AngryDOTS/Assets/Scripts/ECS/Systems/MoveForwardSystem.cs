@@ -3,7 +3,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace Unity.Transforms
 {
@@ -25,7 +24,7 @@ namespace Unity.Transforms
 		{
 			var moveForwardRotationJob = new MoveForwardRotation
 			{
-				dt = Time.deltaTime
+				dt = UnityEngine.Time.deltaTime
 			};
 
 			return moveForwardRotationJob.Schedule(this, inputDeps);
