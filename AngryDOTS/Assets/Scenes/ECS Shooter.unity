@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1379798262}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.013271613, g: 0.014868263, b: 0.03176668, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -96,6 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000002, guid: d235646aaa0510e46bd9ad6cd956ac82,
     type: 2}
   m_UseShadowmask: 0
@@ -177,7 +178,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 220979866}
-  m_LocalRotation: {x: 0.1724006, y: 0.8273177, z: -0.3897202, w: 0.36598048}
+  m_LocalRotation: {x: 0.1724005, y: 0.8273177, z: -0.38972026, w: 0.36598045}
   m_LocalPosition: {x: -8.095254, y: 5.072219, z: 4.8838463}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -218,8 +219,6 @@ MonoBehaviour:
     m_OnCameraLive:
       m_PersistentCalls:
         m_Calls: []
-      m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1457675942}
 --- !u!4 &402024085 stripped
@@ -309,9 +308,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &454054844
 MeshRenderer:
@@ -327,6 +326,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -480,9 +480,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1194508039, guid: 387be402c6e254edb8f04a699355f406, type: 3}
+      propertyPath: ConversionMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1500293480320252, guid: 387be402c6e254edb8f04a699355f406, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4874788804663312, guid: 387be402c6e254edb8f04a699355f406, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4874788804663312, guid: 387be402c6e254edb8f04a699355f406, type: 3}
       propertyPath: m_LocalPosition.x
@@ -497,6 +505,10 @@ PrefabInstance:
       value: -18.93
       objectReference: {fileID: 0}
     - target: {fileID: 4874788804663312, guid: 387be402c6e254edb8f04a699355f406, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4874788804663312, guid: 387be402c6e254edb8f04a699355f406, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -506,14 +518,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4874788804663312, guid: 387be402c6e254edb8f04a699355f406, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4874788804663312, guid: 387be402c6e254edb8f04a699355f406, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4874788804663312, guid: 387be402c6e254edb8f04a699355f406, type: 3}
-      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4874788804663312, guid: 387be402c6e254edb8f04a699355f406, type: 3}
@@ -528,26 +532,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114445215679820892, guid: 387be402c6e254edb8f04a699355f406,
-        type: 3}
-      propertyPath: mainCamera
-      value: 
-      objectReference: {fileID: 1496275639}
-    - target: {fileID: 114445215679820892, guid: 387be402c6e254edb8f04a699355f406,
-        type: 3}
-      propertyPath: whatIsGround.m_Bits
-      value: 512
-      objectReference: {fileID: 0}
     - target: {fileID: 114167452494013206, guid: 387be402c6e254edb8f04a699355f406,
         type: 3}
-      propertyPath: bulletPrefab
-      value: 
-      objectReference: {fileID: 1218724716591446, guid: c4b4b81382c254a999d09f9375fbe2c7,
-        type: 3}
-    - target: {fileID: 114167452494013206, guid: 387be402c6e254edb8f04a699355f406,
-        type: 3}
-      propertyPath: spreadAmount
-      value: 20
+      propertyPath: useECS
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114167452494013206, guid: 387be402c6e254edb8f04a699355f406,
         type: 3}
@@ -561,17 +549,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114167452494013206, guid: 387be402c6e254edb8f04a699355f406,
         type: 3}
-      propertyPath: useECS
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 1218724716591446, guid: c4b4b81382c254a999d09f9375fbe2c7,
+        type: 3}
+    - target: {fileID: 114167452494013206, guid: 387be402c6e254edb8f04a699355f406,
+        type: 3}
+      propertyPath: spreadAmount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114445215679820892, guid: 387be402c6e254edb8f04a699355f406,
+        type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 1496275639}
+    - target: {fileID: 114445215679820892, guid: 387be402c6e254edb8f04a699355f406,
+        type: 3}
+      propertyPath: playerHealth
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114445215679820892, guid: 387be402c6e254edb8f04a699355f406,
+        type: 3}
+      propertyPath: whatIsGround.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 136433486275610172, guid: 387be402c6e254edb8f04a699355f406,
         type: 3}
       propertyPath: m_Center.y
       value: 1.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1194508039, guid: 387be402c6e254edb8f04a699355f406, type: 3}
-      propertyPath: ConversionMode
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 387be402c6e254edb8f04a699355f406, type: 3}
@@ -615,8 +620,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1379798260}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 0.4575472, g: 0.72401524, b: 1, a: 1}
   m_Intensity: 0.5
   m_Range: 10
@@ -894,7 +900,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1496275636}
-  m_LocalRotation: {x: 0.1724006, y: 0.8273177, z: -0.3897202, w: 0.36598048}
+  m_LocalRotation: {x: 0.1724005, y: 0.8273177, z: -0.38972026, w: 0.36598045}
   m_LocalPosition: {x: -8.095254, y: 5.072219, z: 4.8838463}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -978,6 +984,7 @@ MonoBehaviour:
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
   m_UpdateMethod: 2
+  m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
     m_Time: 2
@@ -991,13 +998,9 @@ MonoBehaviour:
   m_CameraCutEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Cinemachine.CinemachineBrain+BrainEvent, Cinemachine, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1552434841
 GameObject:
   m_ObjectHideFlags: 0
@@ -1023,8 +1026,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1552434841}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 1}
   m_Intensity: 0.11
   m_Range: 10

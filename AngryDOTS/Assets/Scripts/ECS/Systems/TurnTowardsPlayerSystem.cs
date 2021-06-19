@@ -4,7 +4,6 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 [UpdateBefore(typeof(MoveForwardSystem))]
 public class TurnTowardsPlayerSystem : JobComponentSystem
