@@ -1,4 +1,4 @@
-﻿using Unity.Entities;
+﻿//using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -14,8 +14,8 @@ public class EnemySpawner : MonoBehaviour
 	[Range(1, 100)] public int spawnsPerInterval = 1;
 	[Range(.1f, 2f)] public float spawnInterval = 1f;
 	
-	EntityManager manager;
-	Entity enemyEntityPrefab;
+	//EntityManager manager;
+	//Entity enemyEntityPrefab;
 
 	float cooldown;
 
@@ -24,8 +24,8 @@ public class EnemySpawner : MonoBehaviour
 	{
 		if (useECS)
 		{
-			manager = World.Active.EntityManager;
-			enemyEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(enemyPrefab, World.Active);
+			//manager = World.Active.EntityManager;
+			//enemyEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(enemyPrefab, World.Active);
 		}
 	}
 
@@ -55,8 +55,8 @@ public class EnemySpawner : MonoBehaviour
 			}
 			else
 			{
-				Entity enemy = manager.Instantiate(enemyEntityPrefab);
-				manager.SetComponentData(enemy, new Translation { Value = pos });
+				//Entity enemy = manager.Instantiate(enemyEntityPrefab);
+				//manager.SetComponentData(enemy, new Translation { Value = pos });
 			}
 		}
 	}

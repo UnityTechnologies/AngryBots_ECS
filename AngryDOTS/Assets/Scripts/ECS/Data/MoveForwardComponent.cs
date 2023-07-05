@@ -1,6 +1,6 @@
-﻿using System;
-using Unity.Entities;
+﻿//using System;
+//using Unity.Entities;
 
-[Serializable]
-public struct MoveForward : IComponentData{}
+//[Serializable]
+//public struct MoveForward : IComponentData{}
 

@@ -1,5 +1,5 @@
-﻿using System;
-using Unity.Entities;
+﻿//using System;
+//using Unity.Entities;
 
-[Serializable]
-public struct PlayerTag : IComponentData {}
+//[Serializable]
+//public struct PlayerTag : IComponentData {}

@@ -1,5 +1,5 @@
 ﻿using Unity.Collections;
-using Unity.Entities;
+//using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -20,16 +20,16 @@ public class PlayerShooting : MonoBehaviour
 
 	float timer;
 
-	EntityManager manager;
-	Entity bulletEntityPrefab;
+	//EntityManager manager;
+	//Entity bulletEntityPrefab;
 
 
 	void Start()
 	{
 		if (useECS)
 		{
-			manager = World.Active.EntityManager;
-			bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, World.Active);
+			//manager = World.Active.EntityManager;
+			//bulletEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(bulletPrefab, World.Active);
 		}
 	}
 
@@ -99,39 +99,39 @@ public class PlayerShooting : MonoBehaviour
 
 	void SpawnBulletECS(Vector3 rotation)
 	{
-		Entity bullet = manager.Instantiate(bulletEntityPrefab);
+		//Entity bullet = manager.Instantiate(bulletEntityPrefab);
 
-		manager.SetComponentData(bullet, new Translation { Value = gunBarrel.position });
-		manager.SetComponentData(bullet, new Rotation { Value = Quaternion.Euler(rotation) });
+		//manager.SetComponentData(bullet, new Translation { Value = gunBarrel.position });
+		//manager.SetComponentData(bullet, new Rotation { Value = Quaternion.Euler(rotation) });
 	}
 
 	void SpawnBulletSpreadECS(Vector3 rotation)
 	{
-		int max = spreadAmount / 2;
-		int min = -max;
-		int totalAmount = spreadAmount * spreadAmount;
+		//int max = spreadAmount / 2;
+		//int min = -max;
+		//int totalAmount = spreadAmount * spreadAmount;
 		
-		Vector3 tempRot = rotation;
-		int index = 0;
+		//Vector3 tempRot = rotation;
+		//int index = 0;
 
-		NativeArray<Entity> bullets = new NativeArray<Entity>(totalAmount, Allocator.TempJob);
-		manager.Instantiate(bulletEntityPrefab, bullets);
+		//NativeArray<Entity> bullets = new NativeArray<Entity>(totalAmount, Allocator.TempJob);
+		//manager.Instantiate(bulletEntityPrefab, bullets);
 
-		for (int x = min; x < max; x++)
-		{
-			tempRot.x = (rotation.x + 3 * x) % 360;
+		//for (int x = min; x < max; x++)
+		//{
+		//	tempRot.x = (rotation.x + 3 * x) % 360;
 
-			for (int y = min; y < max; y++)
-			{
-				tempRot.y = (rotation.y + 3 * y) % 360;
+		//	for (int y = min; y < max; y++)
+		//	{
+		//		tempRot.y = (rotation.y + 3 * y) % 360;
 
-				manager.SetComponentData(bullets[index], new Translation { Value = gunBarrel.position });
-				manager.SetComponentData(bullets[index], new Rotation { Value = Quaternion.Euler(tempRot) });
+		//		manager.SetComponentData(bullets[index], new Translation { Value = gunBarrel.position });
+		//		manager.SetComponentData(bullets[index], new Rotation { Value = Quaternion.Euler(tempRot) });
 
-				index++;
-			}
-		}
-		bullets.Dispose();
+		//		index++;
+		//	}
+		//}
+		//bullets.Dispose();
 	}
 }
 

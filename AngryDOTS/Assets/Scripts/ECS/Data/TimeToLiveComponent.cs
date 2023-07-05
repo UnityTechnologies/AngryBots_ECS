@@ -1,8 +1,8 @@
-﻿using System;
-using Unity.Entities;
+﻿//using System;
+//using Unity.Entities;
 
-[Serializable]
-public struct TimeToLive : IComponentData
-{
-	public float Value;
-}
+//[Serializable]
+//public struct TimeToLive : IComponentData
+//{
+//	public float Value;
+//}
