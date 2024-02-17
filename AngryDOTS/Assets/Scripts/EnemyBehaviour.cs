@@ -1,4 +1,5 @@
 ﻿//using Unity.Entities;
+using Unity.Entities;
 using UnityEngine;
 
 //[RequireComponent(typeof(Rigidbody))]
@@ -43,6 +44,19 @@ public class EnemyBehaviour : MonoBehaviour//, IConvertGameObjectToEntity
 		{
 			Destroy(gameObject);
 			BulletImpactPool.PlayBulletImpact(transform.position);
+		}
+	}
+
+	public class EnemyBaker : Baker<EnemyBehaviour>
+	{
+		public override void Bake(EnemyBehaviour authoring)
+		{
+			var entity = GetEntity(TransformUsageFlags.Dynamic);
+			AddComponent(entity, new EnemyTag { });
+			AddComponent(entity, new MoveForward { });
+
+			AddComponent(entity, new MoveSpeed { Value = authoring.speed });
+			AddComponent(entity, new Health { Value = authoring.enemyHealth });
 		}
 	}
 

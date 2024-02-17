@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Unity.Collections;
+using Unity.Entities;
+using UnityEngine;
 
 public class PlayerMovementAndLook : MonoBehaviour
 {
@@ -18,9 +20,21 @@ public class PlayerMovementAndLook : MonoBehaviour
 	Rigidbody playerRigidbody;
 	bool isDead;
 
+	EntityManager manager;
+	Entity playerDataEntity;
+
 	void Awake()
 	{
 		playerRigidbody = GetComponent<Rigidbody>();
+	}
+
+	void Start()
+	{
+		manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+		EntityQuery query = new EntityQueryBuilder(Allocator.Temp).WithAll<PlayerData>().Build(manager);
+
+		if (query.HasSingleton<PlayerData>())
+			playerDataEntity = query.GetSingletonEntity();
 	}
 
 	void FixedUpdate()
@@ -41,10 +55,8 @@ public class PlayerMovementAndLook : MonoBehaviour
 		cameraForward.y = 0f;
 		cameraRight.y = 0f;
 
-		//Try not to use var for roadshows or learning code
 		Vector3 desiredDirection = cameraForward * inputDirection.z + cameraRight * inputDirection.x;
 		
-		//Why not just pass the vector instead of breaking it up only to remake it on the other side?
 		MoveThePlayer(desiredDirection);
 		TurnThePlayer();
 		AnimateThePlayer(desiredDirection);
@@ -57,6 +69,12 @@ public class PlayerMovementAndLook : MonoBehaviour
 		movement = movement.normalized * speed * Time.deltaTime;
 
 		playerRigidbody.MovePosition(transform.position + movement);
+
+		if (manager.Exists(playerDataEntity))
+		{
+			PlayerData data = new PlayerData { position = transform.position };
+			manager.SetComponentData<PlayerData>(playerDataEntity, data);
+		}
 	}
 
 	void TurnThePlayer()
@@ -112,5 +130,16 @@ public class PlayerMovementAndLook : MonoBehaviour
 		playerAnimator.SetTrigger("Died");
 		playerRigidbody.isKinematic = true;
 		GetComponent<Collider>().enabled = false;
+	}
+
+	public class PlayerBaker : Baker<PlayerMovementAndLook>
+	{
+		public override void Bake(PlayerMovementAndLook authoring)
+		{
+			var entity = GetEntity(TransformUsageFlags.Dynamic);
+			AddComponent(entity, new PlayerTag { });
+
+			AddComponent(entity, new Health { Value = authoring.playerHealth });
+		}
 	}
 }

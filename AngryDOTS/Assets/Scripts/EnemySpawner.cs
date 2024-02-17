@@ -1,4 +1,5 @@
-﻿//using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -14,18 +15,23 @@ public class EnemySpawner : MonoBehaviour
 	[Range(1, 100)] public int spawnsPerInterval = 1;
 	[Range(.1f, 2f)] public float spawnInterval = 1f;
 	
-	//EntityManager manager;
-	//Entity enemyEntityPrefab;
+	EntityManager manager;
+	Entity enemyEntityPrefab;
 
 	float cooldown;
 
 
 	void Start()
 	{
+		cooldown = spawnInterval;
+
 		if (useECS)
 		{
-			//manager = World.Active.EntityManager;
-			//enemyEntityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(enemyPrefab, World.Active);
+			manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+			EntityQuery query = new EntityQueryBuilder(Allocator.Temp).WithAll<Directory>().Build(manager);
+
+			if (query.HasSingleton<Directory>())
+				enemyEntityPrefab = query.GetSingleton<Directory>().enemyPrefab;
 		}
 	}
 
@@ -55,8 +61,15 @@ public class EnemySpawner : MonoBehaviour
 			}
 			else
 			{
-				//Entity enemy = manager.Instantiate(enemyEntityPrefab);
-				//manager.SetComponentData(enemy, new Translation { Value = pos });
+				Entity enemy = manager.Instantiate(enemyEntityPrefab);
+				LocalTransform t = new LocalTransform
+				{
+					Position = pos,
+					Rotation = Quaternion.identity,
+					Scale = 1f
+				};
+
+				manager.SetComponentData(enemy, t);
 			}
 		}
 	}

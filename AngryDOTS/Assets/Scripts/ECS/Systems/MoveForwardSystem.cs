@@ -1,34 +1,38 @@
 ﻿using Unity.Burst;
-using Unity.Collections;
-//using Unity.Entities;
+using Unity.Entities;
 using Unity.Jobs;
-//using Unity.Mathematics;
-using UnityEngine;
+using Unity.Mathematics;
+using Unity.Transforms;
 
-namespace Unity.Transforms
+[BurstCompile]
+partial struct MoveForwardSystem : ISystem
 {
-	public class MoveForwardSystem //: JobComponentSystem
-	{
-	//	[BurstCompile]
-	//	[RequireComponentTag(typeof(MoveForward))]
-	//	struct MoveForwardRotation : IJobForEach<Translation, Rotation, MoveSpeed>
-	//	{
-	//		public float dt;
+    [BurstCompile]
+    public void OnCreate(ref SystemState state)
+    {
+        state.RequireForUpdate<MoveSpeed>();
+    }
 
-	//		public void Execute(ref Translation pos, [ReadOnly] ref Rotation rot, [ReadOnly] ref MoveSpeed speed)
-	//		{
-	//			pos.Value = pos.Value + (dt * speed.Value * math.forward(rot.Value));
-	//		}
-	//	}
+    [BurstCompile]
+    public void OnUpdate(ref SystemState state)
+    {
+        var MoveForwardJob = new MoveForwardJob
+		{
+            dt = SystemAPI.Time.DeltaTime
+        };
 
-	//	protected override JobHandle OnUpdate(JobHandle inputDeps)
-	//	{
-	//		var moveForwardRotationJob = new MoveForwardRotation
-	//		{
-	//			dt = Time.deltaTime
-	//		};
+		MoveForwardJob.ScheduleParallel();
+    }
+}
 
-	//		return moveForwardRotationJob.Schedule(this, inputDeps);
-	//	}
-	}
+[BurstCompile]
+[WithAll(typeof(MoveForward))]
+public partial struct MoveForwardJob : IJobEntity //The query for IJobEntity is inferred by the Execute method
+{
+    public float dt;
+
+    void Execute(in MoveSpeed speed, ref LocalTransform transform)
+    {
+        transform.Position = transform.Position + dt * speed.Value * math.forward(transform.Rotation);
+    }
 }

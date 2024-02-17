@@ -8,16 +8,16 @@ public class Settings : MonoBehaviour
 	public Transform player;
 
 	[Header("Collision Info")]
-	public float playerCollisionRadius = .5f;
+	public static readonly float playerCollisionRadius = .5f;
 	public static float PlayerCollisionRadius
 	{
-		get { return instance.playerCollisionRadius; }
+		get { return playerCollisionRadius; }
 	}
 
-	public float enemyCollisionRadius = .3f;
+	public static readonly float enemyCollisionRadius = .3f;
 	public static float EnemyCollisionRadius
 	{
-		get { return instance.enemyCollisionRadius; }
+		get { return enemyCollisionRadius; }
 	}
 
 	public static Vector3 PlayerPosition
