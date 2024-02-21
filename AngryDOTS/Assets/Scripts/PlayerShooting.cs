@@ -29,10 +29,10 @@ public class PlayerShooting : MonoBehaviour
 		if (useECS)
 		{
 			manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-			EntityQuery query = new EntityQueryBuilder(Allocator.Temp).WithAll<Config>().Build(manager);
+			EntityQuery query = new EntityQueryBuilder(Allocator.Temp).WithAll<Directory>().Build(manager);
 
-			if (query.HasSingleton<Config>())
-				bulletEntityPrefab = query.GetSingleton<Config>().bulletPrefab;
+			if (query.HasSingleton<Directory>())
+				bulletEntityPrefab = query.GetSingleton<Directory>().bulletPrefab;
 		}
 	}
 

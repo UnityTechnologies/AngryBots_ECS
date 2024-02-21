@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-public class ConfigAuthoring : MonoBehaviour
+public class DirectoryAuthoring : MonoBehaviour
 {
     public GameObject bulletPrefab;
     public GameObject enemyPrefab;
 
-    class Baker : Baker<ConfigAuthoring>
+    class Baker : Baker<DirectoryAuthoring>
     {
-        public override void Bake(ConfigAuthoring authoring)
+        public override void Bake(DirectoryAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.None);
-            AddComponent(entity, new Config
+            AddComponent(entity, new Directory
             {
                 bulletPrefab = GetEntity(authoring.bulletPrefab, TransformUsageFlags.Dynamic),
                 enemyPrefab = GetEntity(authoring.enemyPrefab, TransformUsageFlags.Dynamic)
@@ -22,7 +20,7 @@ public class ConfigAuthoring : MonoBehaviour
     }
 }
 
-public struct Config : IComponentData
+public struct Directory : IComponentData
 {
     public Entity bulletPrefab;
     public Entity enemyPrefab;

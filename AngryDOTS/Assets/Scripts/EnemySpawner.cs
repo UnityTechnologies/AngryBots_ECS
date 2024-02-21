@@ -8,7 +8,7 @@ public class EnemySpawner : MonoBehaviour
 	[Header("Enemy Spawn Info")]
 	public bool spawnEnemies = true;
 	public bool useECS = false;
-	public float enemySpawnRadius = 10f;
+	public float enemySpawnRadius = 17f;
 	public GameObject enemyPrefab;
 
 	[Header("Enemy Spawn Timing")]
@@ -28,10 +28,10 @@ public class EnemySpawner : MonoBehaviour
 		if (useECS)
 		{
 			manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-			EntityQuery query = new EntityQueryBuilder(Allocator.Temp).WithAll<Config>().Build(manager);
+			EntityQuery query = new EntityQueryBuilder(Allocator.Temp).WithAll<Directory>().Build(manager);
 
-			if (query.HasSingleton<Config>())
-				enemyEntityPrefab = query.GetSingleton<Config>().enemyPrefab;
+			if (query.HasSingleton<Directory>())
+				enemyEntityPrefab = query.GetSingleton<Directory>().enemyPrefab;
 		}
 	}
 
