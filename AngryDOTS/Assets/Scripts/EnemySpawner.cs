@@ -28,10 +28,10 @@ public class EnemySpawner : MonoBehaviour
 		if (useECS)
 		{
 			manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-			EntityQuery query = new EntityQueryBuilder(Allocator.Temp).WithAll<Directory>().Build(manager);
+			EntityQuery query = new EntityQueryBuilder(Allocator.Temp).WithAll<Config>().Build(manager);
 
-			if (query.HasSingleton<Directory>())
-				enemyEntityPrefab = query.GetSingleton<Directory>().enemyPrefab;
+			if (query.HasSingleton<Config>())
+				enemyEntityPrefab = query.GetSingleton<Config>().enemyPrefab;
 		}
 	}
 

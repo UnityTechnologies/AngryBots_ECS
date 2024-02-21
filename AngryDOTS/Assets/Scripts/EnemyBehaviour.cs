@@ -1,9 +1,6 @@
-﻿//using Unity.Entities;
-using Unity.Entities;
-using UnityEngine;
+﻿using UnityEngine;
 
-//[RequireComponent(typeof(Rigidbody))]
-public class EnemyBehaviour : MonoBehaviour//, IConvertGameObjectToEntity
+public class EnemyBehaviour : MonoBehaviour
 {
 	[Header("Movement")]
 	public float speed = 2f;
@@ -46,29 +43,4 @@ public class EnemyBehaviour : MonoBehaviour//, IConvertGameObjectToEntity
 			BulletImpactPool.PlayBulletImpact(transform.position);
 		}
 	}
-
-	public class EnemyBaker : Baker<EnemyBehaviour>
-	{
-		public override void Bake(EnemyBehaviour authoring)
-		{
-			var entity = GetEntity(TransformUsageFlags.Dynamic);
-			AddComponent(entity, new EnemyTag { });
-			AddComponent(entity, new MoveForward { });
-
-			AddComponent(entity, new MoveSpeed { Value = authoring.speed });
-			AddComponent(entity, new Health { Value = authoring.enemyHealth });
-		}
-	}
-
-	//public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)
-	//{
-	//	manager.AddComponent(entity, typeof(EnemyTag));
-	//	manager.AddComponent(entity, typeof(MoveForward));
-
-	//	MoveSpeed moveSpeed = new MoveSpeed { Value = speed };
-	//	manager.AddComponentData(entity, moveSpeed);
-
-	//	Health health = new Health { Value = enemyHealth };
-	//	manager.AddComponentData(entity, health);
-	//}
 }

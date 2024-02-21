@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 public class PlayerDataAuthoring : MonoBehaviour
@@ -9,11 +8,20 @@ public class PlayerDataAuthoring : MonoBehaviour
     {
         public override void Bake(PlayerDataAuthoring authoring)
         {
-            var entity = GetEntity(TransformUsageFlags.None);
+            var playerObject = GameObject.FindGameObjectWithTag("Player");// FindObjectOfType<PlayerController>().playerHealth
+            var entity = GetEntity(TransformUsageFlags.Dynamic);
+
+            AddComponent(entity, new PlayerTag { });
             AddComponent(entity, new PlayerData
             {
-                position = authoring.transform.position
-            }) ;
+                isAlive = true,
+                position = playerObject.transform.position
+            });
+            
+            AddComponent(entity, new Health
+            {
+                Value = playerObject.GetComponent<PlayerController>().playerHealth
+            });
         }
     }
 }

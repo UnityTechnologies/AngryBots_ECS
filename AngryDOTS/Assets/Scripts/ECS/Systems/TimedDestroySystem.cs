@@ -1,7 +1,6 @@
 ﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using UnityEngine;
 
 
@@ -26,36 +25,6 @@ public partial struct TimedDestroySystem : ISystem
 
 			commandBuffer.Playback(state.EntityManager);
 		}
-
-
-		//VERSION 2==============================================
-		//var commandBuffer = SystemAPI
-		//.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
-		//.CreateCommandBuffer(state.WorldUnmanaged);
-
-		//foreach (var (timer, entity) in SystemAPI.Query<RefRW<TimeToLive>>().WithEntityAccess())
-		//{
-		//	timer.ValueRW.Value -= Time.fixedDeltaTime;
-
-		//	if (timer.ValueRO.Value < 0f)
-		//	{
-		//		commandBuffer.DestroyEntity(entity);
-		//	}
-		//}
-
-		//commandBuffer.Playback(state.EntityManager);
-
-		//}
-		//VERSION 3 ================================================
-		//var commandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
-
-		//var timedDestroyJob = new TimedDestroyJob
-		//{ 
-		//	dt = SystemAPI.Time.DeltaTime,
-		//	ecb = commandBuffer.AsParallelWriter()
-		//};
-
-		//timedDestroyJob.ScheduleParallel();
 	}
 }
 

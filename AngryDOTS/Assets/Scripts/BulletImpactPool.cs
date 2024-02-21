@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+//UPDATE THIS TO USE THE BUILT IN OBJECT POOLING FUNCTIONALITY
 public class BulletImpactPool : MonoBehaviour
 {
 	static BulletImpactPool instance;

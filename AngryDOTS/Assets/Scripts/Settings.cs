@@ -8,17 +8,8 @@ public class Settings : MonoBehaviour
 	public Transform player;
 
 	[Header("Collision Info")]
-	public static readonly float playerCollisionRadius = .5f;
-	public static float PlayerCollisionRadius
-	{
-		get { return playerCollisionRadius; }
-	}
-
-	public static readonly float enemyCollisionRadius = .3f;
-	public static float EnemyCollisionRadius
-	{
-		get { return enemyCollisionRadius; }
-	}
+	public readonly static float PlayerCollisionRadius = .5f;
+	public readonly static float EnemyCollisionRadius = .3f;
 
 	public static Vector3 PlayerPosition
 	{
@@ -48,9 +39,6 @@ public class Settings : MonoBehaviour
 	{
 		if (instance.player == null)
 			return;
-
-		PlayerMovementAndLook playerMove = instance.player.GetComponent<PlayerMovementAndLook>();
-		playerMove.PlayerDied();
 
 		instance.player = null;
 	}

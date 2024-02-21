@@ -7,145 +7,72 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-//[UpdateAfter(typeof(MoveForwardSystem))]
-//[UpdateBefore(typeof(TimedDestroySystem))]
+
 [BurstCompile]
+[UpdateAfter(typeof(TurnTowardsPlayerSystem))]
 partial struct CollisionSystem : ISystem
 {
-	EntityQuery enemyGroup;
-	EntityQuery bulletGroup;
-	EntityQuery playerGroup;
+	EntityQuery enemyQuery;
+	EntityQuery bulletQuery;
+	EntityQuery playerQuery;
+
+	float enemyCollisionRadius;
+	float playerCollisionRadius;
 
 	[BurstCompile]
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<EnemyTag>(); //if there are no enemies, this system doesn't need to run
 
-		enemyGroup = SystemAPI.QueryBuilder().WithAll<Health, EnemyTag, LocalTransform>().Build();
-		bulletGroup = SystemAPI.QueryBuilder().WithAll<TimeToLive, LocalTransform>().Build();
-		playerGroup = SystemAPI.QueryBuilder().WithAll<Health, PlayerTag, LocalTransform>().Build();
+		enemyQuery = SystemAPI.QueryBuilder().WithAll<Health, EnemyTag, LocalTransform>().Build();
+		bulletQuery = SystemAPI.QueryBuilder().WithAll<TimeToLive, LocalTransform>().Build();
+		playerQuery = SystemAPI.QueryBuilder().WithAll<Health, PlayerTag, LocalTransform>().Build();
+
+		enemyCollisionRadius = Settings.EnemyCollisionRadius;
+		playerCollisionRadius = Settings.PlayerCollisionRadius;
 	}
 
 	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
-		float enemyRadius = Settings.EnemyCollisionRadius;
-		float playerRadius = Settings.PlayerCollisionRadius;
-
-		var healthType = SystemAPI.GetComponentTypeHandle<Health>();
-		var translationType = SystemAPI.GetComponentTypeHandle<LocalTransform>(true);
-
 		var jobEvB = new CollisionJob()
 		{
-			radius = enemyRadius * enemyRadius,
-			healthTypeHandle = healthType,
-			transformTypeHandle = translationType,
-			transToTestAgainst = bulletGroup.ToComponentDataArray<LocalTransform>(Allocator.TempJob)
+			radius = enemyCollisionRadius * enemyCollisionRadius,
+			transToTestAgainst = bulletQuery.ToComponentDataArray<LocalTransform>(Allocator.TempJob)
 		};
 
-		state.Dependency = jobEvB.Schedule(enemyGroup, state.Dependency);
-		//JobHandle jobHandle = jobEvB.Schedule(enemyGroup, state.Dependency);
-		//if (Settings.IsPlayerDead())
-		//{
-		//	state.Dependency = jobHandle;
-		//	return;
-		//}
-		////state.Dependency = jobHandle;
-		//var jobPvE = new CollisionJob()
-		//{
-		//	radius = playerRadius * playerRadius,
-		//	healthTypeHandle = healthType,
-		//	transformTypeHandle = translationType,
-		//	transToTestAgainst = enemyGroup.ToComponentDataArray<LocalTransform>(Allocator.TempJob)
-		//};
+		state.Dependency = jobEvB.ScheduleParallel(enemyQuery, state.Dependency);
 
-		//state.Dependency = jobPvE.Schedule(playerGroup, jobHandle);
+		var jobPvE = new CollisionJob()
+		{
+			radius = playerCollisionRadius * playerCollisionRadius,
+			transToTestAgainst = enemyQuery.ToComponentDataArray<LocalTransform>(Allocator.TempJob)
+		};
+
+		state.Dependency = jobPvE.ScheduleParallel(playerQuery, state.Dependency);
 	}
-
-	//EntityQuery enemyGroup;
-	//EntityQuery bulletGroup;
-	//EntityQuery playerGroup;
-
-	//protected override void OnCreate()
-	//{
-	//	playerGroup = GetEntityQuery(typeof(Health), ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<PlayerTag>());
-	//	enemyGroup = GetEntityQuery(typeof(Health), ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<EnemyTag>());
-	//	bulletGroup = GetEntityQuery(typeof(TimeToLive), ComponentType.ReadOnly<Translation>());
-	//}
-
-	//protected override JobHandle OnUpdate(JobHandle inputDependencies)
-	//{
-	//	var healthType = GetArchetypeChunkComponentType<Health>(false);
-	//	var translationType = GetArchetypeChunkComponentType<Translation>(true);
-
-	//	float enemyRadius = Settings.EnemyCollisionRadius;
-	//	float playerRadius = Settings.PlayerCollisionRadius;
-
-	//	var jobEvB = new CollisionJob()
-	//	{
-	//		radius = enemyRadius * enemyRadius,
-	//		healthType = healthType,
-	//		translationType = translationType,
-	//		transToTestAgainst = bulletGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
-	//	};
-
-	//	JobHandle jobHandle = jobEvB.Schedule(enemyGroup, inputDependencies);
-
-	//	if (Settings.IsPlayerDead())
-	//		return jobHandle;
-
-	//	var jobPvE = new CollisionJob()
-	//	{
-	//		radius = playerRadius * playerRadius,
-	//		healthType = healthType,
-	//		translationType = translationType,
-	//		transToTestAgainst = enemyGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
-	//	};
-
-	//	return jobPvE.Schedule(playerGroup, jobHandle);
-	//}
 }
 
 [BurstCompile]
-struct CollisionJob : IJobChunk
+partial struct CollisionJob : IJobEntity
 {
 	public float radius;
-
-	public ComponentTypeHandle<Health> healthTypeHandle;
-	[ReadOnly] public ComponentTypeHandle<LocalTransform> transformTypeHandle;
 
 	[DeallocateOnJobCompletion]
 	[ReadOnly] public NativeArray<LocalTransform> transToTestAgainst;
 
-	public void Execute(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask)
+	public void Execute(ref Health health, in LocalTransform transform)
 	{
-		Assert.IsFalse(useEnabledMask);
+		float damage = 0f;
 
-		var chunkHealths = chunk.GetNativeArray(ref healthTypeHandle);
-		var chunkTransforms = chunk.GetNativeArray(ref transformTypeHandle);
-
-		for (int i = 0; i < chunk.Count; i++)
+		for (int i = 0; i < transToTestAgainst.Length; i++)
 		{
-			float damage = 0f;
-			Health health = chunkHealths[i];
-			float3 pos = chunkTransforms[i].Position;
-
-			for (int j = 0; j < transToTestAgainst.Length; j++)
-			{
-				float3 pos2 = transToTestAgainst[j].Position;
-
-				if (CheckCollision(pos, pos2, radius))
-				{
-					damage += 1;
-				}
-			}
-
-			if (damage > 0)
-			{
-				health.Value -= damage;
-				chunkHealths[i] = health;
-			}
+			if (CheckCollision(transform.Position, transToTestAgainst[i].Position, radius))
+				damage += 1;
 		}
+
+		if (damage > 0)
+			health.Value -= damage;
 	}
 
 	bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
