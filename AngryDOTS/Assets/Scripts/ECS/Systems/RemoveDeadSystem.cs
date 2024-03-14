@@ -6,6 +6,7 @@ using Unity.Collections;
 
 partial struct RemoveDeadSystem : ISystem
 {
+	[BurstCompile]
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<Health>();
@@ -25,19 +26,6 @@ partial struct RemoveDeadSystem : ISystem
 			}
 		}*/
 
-		//foreach (var (health, transform, entity) in Query<RefRO<Health>, RefRO<LocalTransform>>().WithAll<EnemyTag>().WithEntityAccess())
-		//{
-		//	if (health.ValueRO.Value <= 0)
-		//	{
-		//		var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
-		//			.CreateCommandBuffer(state.WorldUnmanaged);
-
-		//		ecb.DestroyEntity(entity);
-		//		//BulletImpactPool.PlayBulletImpact(transform.ValueRO.Position);
-		//	}
-
-		//}
-
 		using (var commandBuffer = new EntityCommandBuffer(Allocator.TempJob))
 		{
 			foreach (var (health, entity) in SystemAPI.Query<RefRO<Health>>().WithAll<EnemyTag>().WithEntityAccess())
@@ -51,24 +39,4 @@ partial struct RemoveDeadSystem : ISystem
 			commandBuffer.Playback(state.EntityManager);
 		}
 	}
-
-	//protected override void OnUpdate()
-	//{
-	//	Entities.ForEach((Entity entity, ref Health health, ref Translation pos) =>
-	//	{
-	//		if (health.Value <= 0)
-	//		{
-	//			if (EntityManager.HasComponent(entity, typeof(PlayerTag)))
-	//			{
-	//				Settings.PlayerDied();
-	//			}
-
-	//			else if (EntityManager.HasComponent(entity, typeof(EnemyTag)))
-	//			{
-	//				PostUpdateCommands.DestroyEntity(entity);
-	//				BulletImpactPool.PlayBulletImpact(pos.Value);
-	//			}
-	//		}
-	//	});
-	//}
 }

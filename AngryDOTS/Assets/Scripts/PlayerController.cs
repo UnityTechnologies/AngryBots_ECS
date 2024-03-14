@@ -31,22 +31,7 @@ public class PlayerController : MonoBehaviour
 
 	void Start()
 	{
-		manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-		
-		playerDataEntity = manager.CreateEntity();
-		manager.AddComponent<PlayerTag>(playerDataEntity);
-
-		LocalTransform t = new LocalTransform
-		{
-			Position = transform.position
-		};
-		manager.AddComponentData(playerDataEntity, t);
-
-		Health h = new Health
-		{
-			Value = playerHealth
-		};
-		manager.AddComponentData(playerDataEntity, h);
+		CreateEntity();
 	}
 
 	void FixedUpdate()
@@ -126,6 +111,40 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	void PlayerDied()
+	{
+		if (isDead)
+			return;
+
+		isDead = true;
+
+		playerAnimator.SetTrigger("Died");
+		playerRigidbody.isKinematic = true;
+		GetComponent<Collider>().enabled = false;
+
+		Settings.PlayerDied();
+	}
+
+	void CreateEntity()
+	{
+		manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+		playerDataEntity = manager.CreateEntity();
+		manager.AddComponent<PlayerTag>(playerDataEntity);
+
+		LocalTransform t = new LocalTransform
+		{
+			Position = transform.position
+		};
+		manager.AddComponentData(playerDataEntity, t);
+
+		Health h = new Health
+		{
+			Value = playerHealth
+		};
+		manager.AddComponentData(playerDataEntity, h);
+	}
+
 	void UpdateEntity()
 	{
 		if (playerDataEntity == Entity.Null)
@@ -146,19 +165,5 @@ public class PlayerController : MonoBehaviour
 			PlayerDied();
 		}
 
-	}
-
-	void PlayerDied()
-	{
-		if (isDead)
-			return;
-
-		isDead = true;
-
-		playerAnimator.SetTrigger("Died");
-		playerRigidbody.isKinematic = true;
-		GetComponent<Collider>().enabled = false;
-
-		Settings.PlayerDied();
 	}
 }
