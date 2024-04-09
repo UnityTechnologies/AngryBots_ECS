@@ -14,14 +14,17 @@ partial struct TurnTowardsPlayerSystem : ISystem
 		state.RequireForUpdate<EnemyTag>();
 	}
 
+	// NOT burst compiled
 	public void OnUpdate(ref SystemState state)
 	{
+		//NOTE: This prevents OnUpdate from being Burst
+		//compiled, but not the job itself
 		if (Settings.IsPlayerDead())
 			return;
 
-		var TurnTowardsPlayerJob = new TurnTowardsPlayerJob
+		var TurnTowardsPlayerJob = new TurnTowardTargetJob
 		{
-			playerPosition = Settings.PlayerPosition
+			targetPosition = Settings.PlayerPosition
 		};
 
 		TurnTowardsPlayerJob.ScheduleParallel();
@@ -30,13 +33,13 @@ partial struct TurnTowardsPlayerSystem : ISystem
 
 [BurstCompile]
 [WithAll(typeof(EnemyTag))]
-public partial struct TurnTowardsPlayerJob : IJobEntity 
+public partial struct TurnTowardTargetJob : IJobEntity
 {
-	public float3 playerPosition;
+	public float3 targetPosition;
 
 	void Execute(ref LocalTransform transform)
 	{
-		float3 heading = playerPosition - transform.Position;
+		float3 heading = targetPosition - transform.Position;
 		heading.y = 0f;
 		transform.Rotation = quaternion.LookRotation(heading, math.up());
 	}
