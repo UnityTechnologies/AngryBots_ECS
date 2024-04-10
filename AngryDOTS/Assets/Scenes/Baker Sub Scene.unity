@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 2016307122}
   - component: {fileID: 2016307121}
   m_Layer: 0
-  m_Name: Config
+  m_Name: Directory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
