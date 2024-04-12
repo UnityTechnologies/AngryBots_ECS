@@ -1,5 +1,5 @@
 ﻿/* MOVE FORWARD SYSTEM
- * This simple system finds any entity that has a LocalTransform, MoveForward, and MoveSpeed
+ * This system finds any entity that has a LocalTransform, MoveForward, and MoveSpeed
  * component and moves the entity forward. In this project, the two entity types it will 
  * affect are bullets and enemies
  */

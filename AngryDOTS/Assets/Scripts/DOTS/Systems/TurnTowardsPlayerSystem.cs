@@ -1,5 +1,5 @@
 ﻿/* TURN TOWARDS PLAYER SYSTEM
- * This simple system finds any entity that has a LocalTransform and EnemyTag component 
+ * This system finds any entity that has a LocalTransform and EnemyTag component 
  * and turns the entity to point its Z axis towards a target (in this case, the player). 
  * In this project, the one entity type it will affect are enemies
  */
