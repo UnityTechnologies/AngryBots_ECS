@@ -32,7 +32,7 @@ partial struct MoveForwardSystem : ISystem
 
         // Schedule this job as multi-threaded. Since we don't pass in a query, the
         // job itself will contain the query
-		MoveForwardJob.ScheduleParallel();
+        MoveForwardJob.ScheduleParallel();
     }
 }
 
