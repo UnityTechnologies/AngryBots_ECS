@@ -1,5 +1,13 @@
-﻿using UnityEngine;
-//UPDATE THIS TO USE THE BUILT IN OBJECT POOLING FUNCTIONALITY
+﻿/* BULLET IMPACT POOL
+ * This script manages the object pool of bullet impact prefabs. Since this code isn't 
+ * related to DOTS learning, it has been kept minimal. Do not try to learn 
+ * "best practices" from this code as it is intended to be as simple and unobtrusive as 
+ * possible. In fact, this code really should be using the new Object Pooling built 
+ * into Unity, it just hasn't been updates yet.
+ */
+
+using UnityEngine;
+
 public class BulletImpactPool : MonoBehaviour
 {
 	static BulletImpactPool instance;

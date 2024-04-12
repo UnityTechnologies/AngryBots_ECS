@@ -1,7 +1,8 @@
-// ENEMY AUTHORING
-// This script handles converting the Enemy prefab into an entity. The
-// data components given to this entity will allow it to be used by
-// the various systems that provide the functionality
+/* ENEMY AUTHORING
+* This script handles converting the Enemy prefab into an entity. The
+* data components given to this entity will allow it to be used by
+* the various systems that provide the functionality
+*/
 
 using Unity.Entities;
 using UnityEngine;

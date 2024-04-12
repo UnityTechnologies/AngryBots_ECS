@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/* SETTINGS
+ * This script contains helper data and methods for the running of this project.
+ * Since this code isn't related to DOTS learning, it has been kept minimal. Do 
+ * not try to learn "best practices" from this code as it is intended to be as
+ * simple and unobtrusive as possible
+ */
+
+using UnityEngine;
 
 public class Settings : MonoBehaviour
 {

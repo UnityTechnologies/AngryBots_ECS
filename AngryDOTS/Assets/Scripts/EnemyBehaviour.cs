@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/* ENEMY BEHAVIOUR
+ * This script manages the behavior of enemy GameObjects. Since this code isn't 
+ * related to DOTS learning, it has been kept minimal. Do not try to learn 
+ * "best practices" from this code as it is intended to be as simple and unobtrusive 
+ * as possible
+ */
+
+using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {

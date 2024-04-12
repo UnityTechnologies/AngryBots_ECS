@@ -1,8 +1,9 @@
-// DIRECTORY AUTHORING
-// This script handles converting the Directory game object into an entity.
-// The Directory is simply that: a directory of prefabs that will need to
-// be converted to entities and then spawned at runtime. There will only be
-// one Directory so that it can be found as a singleton entity
+/* DIRECTORY AUTHORING
+* This script handles converting the Directory game object into an entity.
+* The Directory is simply that: a directory of prefabs that will need to
+* be converted to entities and then spawned at runtime. There will only be
+* one Directory so that it can be found as a singleton entity
+*/
 
 using Unity.Entities;
 using UnityEngine;
