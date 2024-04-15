@@ -13,6 +13,7 @@
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+[Ll]ayouts/
 SceneDependencyCache/
 SceneDependencyCache.meta
 
@@ -27,6 +28,7 @@ SceneDependencyCache.meta
 *.pidb
 *.booproj
 .vs/
+shadercompiler-UnityShaderCompiler.exe0.log
 
 #Unity3D Generated File On Crash Reports
 sysinfo.txt
