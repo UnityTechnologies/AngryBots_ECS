@@ -26,3 +26,6 @@ partial struct TurnTowardsPlayerSystem : ISystem
 }
 
 
+//float3 heading = targetPosition - transform.Position;
+//heading.y = 0f;
+//transform.Rotation = quaternion.LookRotation(heading, math.up());
