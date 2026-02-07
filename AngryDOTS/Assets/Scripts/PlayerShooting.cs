@@ -101,41 +101,28 @@ public class PlayerShooting : MonoBehaviour
 	// This method spawns bullets as entities instead of GameObjects
 	void SpawnBulletECS(Vector3 rotation)
 	{
+		// Add spawn logic here
+		
+		
+		
 		
 	}
 
 	// This method spawns many bullets at a time as entities instead of GameObjects
 	void SpawnBulletSpreadECS(Vector3 rotation)
 	{
-		// Most of this code is just boilerplate math to create a grid of rotations. Only the
-		// relevant DOTS code is commented
-		if (spreadAmount % 2 != 0) //No odd numbers to keep the spread even
-			spreadAmount += 1;
-
-		int max = spreadAmount / 2;
-		int min = -max;
-		int totalAmount = spreadAmount * spreadAmount;
-
-		Vector3 tempRot = rotation;
-		int index = 0;
-
-		
-
-		for (int x = min; x < max; x++)
+		// Use our EntityManager to instantiate a new entity and give it a bullet spread request component
+		var bulletRequestEntity = manager.CreateEntity();
+		var spawnBulletSpreadRequest = new SpawnBulletSpreadRequest
 		{
-			tempRot.x = (rotation.x + 3 * x) % 360;
-
-			for (int y = min; y < max; y++)
-			{
-				tempRot.y = (rotation.y + 3 * y) % 360;
-
-
-				
-
-				index++;
-			}
-		}
+			gunBarrelPosition = gunBarrel.position,
+			playerRotation = rotation,
+			spreadAmount = spreadAmount
+		};
 		
+		// Set the component data we just created for the entity we just created
+		manager.AddComponent<SpawnBulletSpreadRequest>(bulletRequestEntity);
+		manager.SetComponentData(bulletRequestEntity, spawnBulletSpreadRequest);
 	}
 }
 
