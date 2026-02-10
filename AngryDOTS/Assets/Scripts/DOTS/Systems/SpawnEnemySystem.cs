@@ -28,7 +28,7 @@ partial struct SpawnEnemySystem : ISystem
         // This code uses a CommandBuffer, which lets us queue up commands for playback later.
         // Note: CommandBuffers must be cleaned up to prevent memory leaks, so the "using" syntax
         // is used here to automatically manage that
-        using (var commandBuffer = new EntityCommandBuffer(Allocator.TempJob))
+        using (var commandBuffer = new EntityCommandBuffer(Allocator.Temp))
         {
             foreach (var(spawnBulletRequest,entity) in
                      SystemAPI.Query<RefRO<SpawnEnemyRequest>>()

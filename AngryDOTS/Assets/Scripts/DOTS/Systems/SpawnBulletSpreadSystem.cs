@@ -25,7 +25,7 @@ partial struct SpawnBulletSpreadSystem : ISystem
         Entity bulletEntityPrefab = directory.bulletPrefab;
         EntityManager manager = state.EntityManager;
         
-        using (var commandBuffer = new EntityCommandBuffer(Allocator.TempJob))
+        using (var commandBuffer = new EntityCommandBuffer(Allocator.Temp))
         {
             foreach (var(spawnBulletRequest,entity) in
                      SystemAPI.Query<RefRO<SpawnBulletSpreadRequest>>()
