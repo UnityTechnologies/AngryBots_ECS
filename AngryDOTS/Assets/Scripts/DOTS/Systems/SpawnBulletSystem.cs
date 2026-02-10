@@ -7,7 +7,6 @@ using Unity.Transforms;
 
 partial struct SpawnBulletSystem : ISystem
 {
-    [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         // start logic goes here...
@@ -15,7 +14,6 @@ partial struct SpawnBulletSystem : ISystem
         
     }
     
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         // update logic goes here...
@@ -31,18 +29,13 @@ partial struct SpawnBulletSystem : ISystem
         Quaternion rotation)
     {
         // Use our EntityManager to instantiate a copy of the bullet entity
-        Entity bullet = manager.Instantiate(bulletEntityPrefab);
+        
 
         // Create a new LocalTransform component and give it the values needed to
         // be positioned at the barrel of the gun
-        LocalTransform t = new LocalTransform()
-        {
-            Position = position,
-            Rotation = rotation,
-            Scale = 1f
-        };
+
 
         // Set the component data we just created for the entity we just created
-        manager.SetComponentData(bullet, t);
+        
     }
 }
