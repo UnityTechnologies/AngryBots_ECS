@@ -1,64 +1,53 @@
 ﻿/* PLAYER SHOOTING
  * This script manages the process of shooting bullets. Most of the code is general
  * or used for GameObject workflows. The DOTS items to be aware of in this script are:
-	* - The entity members: manager, and bulletEntityPrefab
+	* - The entity member: manager
 	* - The initialization in the Start() method
 	* - The entity instantiation in the SpawnBulletECS() and SpawnBulletSpreadECS() methods
+ *
+ * Note: This code is for presentation and learning purposes. We're handing off the spawning
+ *	of entities to the Systems, but based on MonoBehaviour input.
+ * 
+ *  You can have all of the input detection code be systems-based, please refer to our ECS samples:
+ *	https://github.com/Unity-Technologies/EntityComponentSystemSamples
  */
 
-using Unity.Collections;
-using Unity.Entities;
-using Unity.Transforms;
 using UnityEngine;
 
 public class PlayerShooting : MonoBehaviour
 {
-	public bool useECS = false;
-	public bool spreadShot = false;
-
 	[Header("General")]
 	public Transform gunBarrel;
 	public ParticleSystem shotVFX;
 	public AudioSource shotAudio;
-	public float fireRate = .1f;
-	public int spreadAmount = 20;
-
+	
 	[Header("Bullets")]
 	public GameObject bulletPrefab;
 
 	float timer;
 
-	EntityManager manager;		// Member to hold an EntityManager reference
-	Entity bulletEntityPrefab;	// Member to hold the ID of the bullet entity
-
 
 	void Start()
 	{
 		// If not using ECS, no need to do anything here
-		if (!useECS) return;
-		
-		
+		if (!Settings.IsUsingECSForBullets()) return;
 	}
-
+	
 	void Update()
 	{
+		if(Settings.IsPlayerDead())
+			return;
+		
 		timer += Time.deltaTime;
 
-		if (Input.GetButton("Fire1") && timer >= fireRate)
+		if (Input.GetButton("Fire1") && timer >= Settings.GetFireRate())
 		{
 			Vector3 rotation = gunBarrel.rotation.eulerAngles;
 			rotation.x = 0f;
 
-			if (useECS)
+			if (!Settings.IsUsingECSForBullets())
 			{
-				if (spreadShot)
-					SpawnBulletSpreadECS(rotation);
-				else
-					SpawnBulletECS(rotation);
-			}
-			else
-			{
-				if (spreadShot)
+				if (Settings.IsUsingSpreadShot())
 					SpawnBulletSpread(rotation);
 				else
 					SpawnBullet(rotation);
@@ -81,7 +70,7 @@ public class PlayerShooting : MonoBehaviour
 
 	void SpawnBulletSpread(Vector3 rotation)
 	{
-		int max = spreadAmount / 2;
+		int max = Settings.GetSpreadAmount() / 2;
 		int min = -max;
 
 		Vector3 tempRot = rotation;
@@ -97,32 +86,4 @@ public class PlayerShooting : MonoBehaviour
 			}
 		}
 	}
-
-	// This method spawns bullets as entities instead of GameObjects
-	void SpawnBulletECS(Vector3 rotation)
-	{
-		// Add spawn logic here
-		
-		
-		
-		
-	}
-
-	// This method spawns many bullets at a time as entities instead of GameObjects
-	void SpawnBulletSpreadECS(Vector3 rotation)
-	{
-		// Use our EntityManager to instantiate a new entity and give it a bullet spread request component
-		var bulletRequestEntity = manager.CreateEntity();
-		var spawnBulletSpreadRequest = new SpawnBulletSpreadRequest
-		{
-			gunBarrelPosition = gunBarrel.position,
-			playerRotation = rotation,
-			spreadAmount = spreadAmount
-		};
-		
-		// Set the component data we just created for the entity we just created
-		manager.AddComponent<SpawnBulletSpreadRequest>(bulletRequestEntity);
-		manager.SetComponentData(bulletRequestEntity, spawnBulletSpreadRequest);
-	}
 }
-

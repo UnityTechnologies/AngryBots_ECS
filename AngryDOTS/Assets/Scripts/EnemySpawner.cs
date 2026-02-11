@@ -14,8 +14,6 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
 	[Header("Enemy Spawn Info")]
-	public bool spawnEnemies = true;
-	public bool useECS = false;
 	public float enemySpawnRadius = 17f;
 	public GameObject enemyPrefab;
 
@@ -34,7 +32,7 @@ public class EnemySpawner : MonoBehaviour
 		cooldown = spawnInterval;
 
 		// If not using ECS, no need to do anything here
-		if (!useECS)
+		if (!Settings.IsUsingECSForEnemies())
 			return;
 		
 		// Get a reference to an EntityManager which is how we will create and access entities
@@ -43,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
 	
 	void Update()
     {
-		if (!spawnEnemies || Settings.IsPlayerDead())
+		if (!Settings.IsSpawningEnemies() || Settings.IsPlayerDead())
 			return;
 
 		cooldown -= Time.deltaTime;
@@ -61,7 +59,7 @@ public class EnemySpawner : MonoBehaviour
 		{
 			Vector3 newEnemyPosition = Settings.GetPositionAroundPlayer(enemySpawnRadius);
 
-			if (!useECS)
+			if (!Settings.IsUsingECSForEnemies())
 			{
 				Instantiate(enemyPrefab, newEnemyPosition, Quaternion.identity);
 			}

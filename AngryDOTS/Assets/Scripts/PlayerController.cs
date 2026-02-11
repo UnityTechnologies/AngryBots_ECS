@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 		// We only need to do the ECS steps if the player is using ECS for bullets and 
 		// entities. This isn't a perfect way to set it up, but it works in this
 		// simple example
-		useECS = GetComponent<PlayerShooting>().useECS;
+		useECS = Settings.IsUsingECSForBullets();
 		
 		CreateEntity();
 	}
@@ -189,7 +189,7 @@ public class PlayerController : MonoBehaviour
 
 		// Use the player's data entity to find the player's Health data component
 		Health health = manager.GetComponentData<Health>(playerDataEntity);
-
+		
 		// Check to see if the player is still alive. Since we will only either face GameObject
 		// enemies or Entity enemies, there is no need to sync health both ways
 		if (health.Value > 0)

@@ -5,35 +5,72 @@
  * simple and unobtrusive as possible
  */
 
+using System;
 using UnityEngine;
 
 public class Settings : MonoBehaviour
 {
-	static Settings instance;
+	public static Settings Instance { get; private set; }
 
+	[Header("Player Shooting Settings")]
+	[InspectorName("Use ECS for Bullets")]
+	public bool useECSforBullets = false;
+	public bool spreadShot = false;
+	public float fireRate = .1f;
+	public int spreadAmount = 20;
+	
+	[Header("Enemy Spawning Settings")]
+	public bool spawnEnemies = false;
+	[InspectorName("Use ECS for Enemies")]
+	public bool useECSforEnemies = true;
+	
 	[Header("Game Object References")]
 	public Transform player;
 
+	private PlayerShooting _playerShooting;
+	
 	[Header("Collision Info")]
 	public readonly static float PlayerCollisionRadius = .5f;
 	public readonly static float EnemyCollisionRadius = .3f;
+	
+	#region Player Properties for Shooting
+	public static Vector3 PlayerPosition => Instance.player.position;
+	
+	public static Vector3 PlayerGunBarrelPosition => 
+		Instance._playerShooting.gunBarrel.position;
+	
+	public static Vector3 PlayerGunBarrelRotationEuler => 
+		Instance._playerShooting.gunBarrel.rotation.eulerAngles;
+	#endregion
 
-	public static Vector3 PlayerPosition
-	{
-		get { return instance.player.position; }
-	}
-
+	#region Bullet Spawning Properties
+	public static bool IsUsingECSForBullets() => Instance.useECSforBullets;
+	public static bool IsUsingSpreadShot() => Instance.spreadShot;
+	public static int  GetSpreadAmount() => Instance.spreadAmount;
+	public static float GetFireRate() => Instance.fireRate;
+	#endregion
+	
+	#region Enemy Spawning Properties
+	public static bool IsSpawningEnemies() => Instance.spawnEnemies;
+	public static bool IsUsingECSForEnemies() => Instance.useECSforEnemies;
+	#endregion
+	
 	void Awake()
 	{
-		if (instance != null && instance != this)
+		if (Instance != null && Instance != this)
 			Destroy(gameObject);
 		else
-			instance = this;
+			Instance = this;
+	}
+
+	private void Start()
+	{
+		_playerShooting = player.GetComponent<PlayerShooting>();
 	}
 
 	public static Vector3 GetPositionAroundPlayer(float radius)
 	{
-		Vector3 playerPos = instance.player.position;
+		Vector3 playerPos = Instance.player.position;
 
 		float angle = UnityEngine.Random.Range(0f, 2 * Mathf.PI);
 		float s = Mathf.Sin(angle);
@@ -44,14 +81,14 @@ public class Settings : MonoBehaviour
 
 	public static void PlayerDied()
 	{
-		if (instance.player == null)
+		if (Instance.player == null)
 			return;
 
-		instance.player = null;
+		Instance.player = null;
 	}
 
 	public static bool IsPlayerDead()
 	{
-		return instance.player == null;
+		return Instance.player == null;
 	}
 }
