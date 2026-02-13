@@ -8,7 +8,7 @@ using Unity.Transforms;
 // Timing: Update this system before the group of systems that renders the geometry.
 //  This helps us to allocate and set transform data of the entity before it's rendered,
 //  to avoid having a 1-frame delay where you can see the entity at the origin
-[UpdateBefore(typeof(TransformSystemGroup))]
+
 partial struct SpawnBulletSystem : ISystem
 {
     float timer;

@@ -16,7 +16,6 @@ partial struct SpawnEnemySystem : ISystem
     // A query to find the directory data component
     EntityQuery directoryQuery;
     
-    [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         // These 2 lines makes the system not update unless at least 1 entity in the world
@@ -28,7 +27,6 @@ partial struct SpawnEnemySystem : ISystem
         timer = 0f;
     }
     
-    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         if (!Settings.Instance.useECSforEnemies || 
@@ -45,15 +43,18 @@ partial struct SpawnEnemySystem : ISystem
 
         if (timer > Settings.Instance.enemySpawnInterval)
         {
-            float3 newEnemyPosition = 
-                Settings.GetPositionAroundPlayer(Settings.Instance.enemySpawnRadius);
-            
-            SpawnEnemy(
-                ref manager,
-                enemyPrefab,
-                newEnemyPosition);
-            
-            timer = 0f;
+            for (int i = 0; i < Settings.Instance.enemySpawnsPerInterval; i++)
+            {
+                float3 newEnemyPosition =
+                    Settings.GetPositionAroundPlayer(Settings.Instance.enemySpawnRadius);
+
+                SpawnEnemy(
+                    ref manager,
+                    enemyPrefab,
+                    newEnemyPosition);
+
+                timer = 0f;
+            }
         }
     }
     
