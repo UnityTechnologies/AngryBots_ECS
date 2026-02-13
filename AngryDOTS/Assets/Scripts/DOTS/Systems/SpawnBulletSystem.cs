@@ -65,7 +65,7 @@ partial struct SpawnBulletSystem : ISystem
     }
     
     // This method spawns bullets as entities instead of GameObjects
-    private void SpawnBullet(
+    void SpawnBullet(
         ref EntityManager manager,
         Entity bulletEntityPrefab, 
         float3 position,
@@ -83,7 +83,7 @@ partial struct SpawnBulletSystem : ISystem
         
     }
     
-    private void SpawnBulletSpread(
+    void SpawnBulletSpread(
         ref EntityManager manager, 
         Entity bulletEntityPrefab,
         int spreadAmount,

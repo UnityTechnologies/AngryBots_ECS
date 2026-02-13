@@ -8,35 +8,19 @@
 	* - The entity instantiation in the Spawn() method
  */
 
-using Unity.Entities;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
 	[Header("Enemy Spawn Info")]
-	public float enemySpawnRadius = 17f;
 	public GameObject enemyPrefab;
-
-	[Header("Enemy Spawn Timing")]
-	[Range(1, 100)] public int spawnsPerInterval = 1;
-	[Range(.1f, 2f)] public float spawnInterval = 1f;
-	
-	// Member to hold an EntityManager reference
-	EntityManager manager;
 
 	float cooldown;
 
 
 	void Start()
 	{
-		cooldown = spawnInterval;
-
-		// If not using ECS, no need to do anything here
-		if (!Settings.Instance.useECSforEnemies)
-			return;
-		
-		// Get a reference to an EntityManager which is how we will create and access entities
-		manager = World.DefaultGameObjectInjectionWorld.EntityManager;
+		cooldown = Settings.Instance.enemySpawnInterval;
 	}
 	
 	void Update()
@@ -48,33 +32,21 @@ public class EnemySpawner : MonoBehaviour
 
 		if (cooldown <= 0f)
 		{
-			cooldown += spawnInterval;
+			cooldown += Settings.Instance.enemySpawnInterval;
 			Spawn();
 		}
     }
 
 	void Spawn()
 	{
-		for (int i = 0; i < spawnsPerInterval; i++)
+		for (int i = 0; i < Settings.Instance.enemySpawnsPerInterval; i++)
 		{
-			Vector3 newEnemyPosition = Settings.GetPositionAroundPlayer(enemySpawnRadius);
+			Vector3 newEnemyPosition = 
+				Settings.GetPositionAroundPlayer(Settings.Instance.enemySpawnRadius);
 
 			if (!Settings.Instance.useECSforEnemies)
 			{
 				Instantiate(enemyPrefab, newEnemyPosition, Quaternion.identity);
-			}
-			else
-			{
-				// Use our EntityManager to instantiate a new entity and give it an enemy spawn request component
-				var enemyRequestEntity = manager.CreateEntity();
-				var spawnEnemyRequest = new SpawnEnemyRequest()
-				{
-					position = newEnemyPosition
-				};
-		
-				// Set the component data we just created for the entity we just created
-				manager.AddComponent<SpawnEnemyRequest>(enemyRequestEntity);
-				manager.SetComponentData(enemyRequestEntity, spawnEnemyRequest);
 			}
 		}
 	}

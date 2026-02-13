@@ -24,14 +24,7 @@ public class PlayerShooting : MonoBehaviour
 	[Header("Bullets")]
 	public GameObject bulletPrefab;
 
-	float timer;
-
-
-	void Start()
-	{
-		// If not using ECS, no need to do anything here
-		if (!Settings.Instance.useECSforBullets) return;
-	}
+	private float timer;
 	
 	void Update()
 	{

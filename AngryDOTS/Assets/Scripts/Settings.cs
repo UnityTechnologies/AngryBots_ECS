@@ -7,6 +7,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Settings : MonoBehaviour
 {
@@ -21,10 +22,15 @@ public class Settings : MonoBehaviour
 	[Header("Enemy Spawning Settings")]
 	public bool spawnEnemies = false;
 	public bool useECSforEnemies = true;
+	public float enemySpawnRadius = 17f;
+
+	[Header("Enemy Spawn Timing")]
+	[Range(1, 100)] public int enemySpawnsPerInterval = 1;
+	[Range(.1f, 2f)] public float enemySpawnInterval = 1f;
 	
 	[Header("Game Object References")]
 	public Transform player;
-
+	
 	private PlayerShooting _playerShooting;
 	
 	[Header("Collision Info")]
