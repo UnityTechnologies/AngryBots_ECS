@@ -44,14 +44,14 @@ partial struct SpawnBulletSystem : ISystem
         // grab a reference to the entity manager. With it, we'll instantiate the new bullet(s)
 
         
-        if (Settings.IsUsingECSForBullets() && 
+        if (Settings.Instance.useECSforBullets && 
             Input.GetButton("Fire1") && 
-            timer >= Settings.GetFireRate())
+            timer >= Settings.Instance.fireRate)
         {
             Vector3 rotation = Settings.PlayerGunBarrelRotationEuler;
             rotation.x = 0f;
 
-            if (!Settings.IsUsingSpreadShot())
+            if (!Settings.Instance.spreadShot)
             {
                 // Spawn single bullet
             }

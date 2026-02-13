@@ -30,7 +30,7 @@ public class PlayerShooting : MonoBehaviour
 	void Start()
 	{
 		// If not using ECS, no need to do anything here
-		if (!Settings.IsUsingECSForBullets()) return;
+		if (!Settings.Instance.useECSforBullets) return;
 	}
 	
 	void Update()
@@ -40,14 +40,14 @@ public class PlayerShooting : MonoBehaviour
 		
 		timer += Time.deltaTime;
 
-		if (Input.GetButton("Fire1") && timer >= Settings.GetFireRate())
+		if (Input.GetButton("Fire1") && timer >= Settings.Instance.fireRate)
 		{
 			Vector3 rotation = gunBarrel.rotation.eulerAngles;
 			rotation.x = 0f;
 
-			if (!Settings.IsUsingECSForBullets())
+			if (!Settings.Instance.useECSforBullets)
 			{
-				if (Settings.IsUsingSpreadShot())
+				if (Settings.Instance.spreadShot)
 					SpawnBulletSpread(rotation);
 				else
 					SpawnBullet(rotation);
@@ -70,7 +70,7 @@ public class PlayerShooting : MonoBehaviour
 
 	void SpawnBulletSpread(Vector3 rotation)
 	{
-		int max = Settings.GetSpreadAmount() / 2;
+		int max = Settings.Instance.spreadAmount / 2;
 		int min = -max;
 
 		Vector3 tempRot = rotation;

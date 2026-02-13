@@ -13,7 +13,6 @@ public class Settings : MonoBehaviour
 	public static Settings Instance { get; private set; }
 
 	[Header("Player Shooting Settings")]
-	[InspectorName("Use ECS for Bullets")]
 	public bool useECSforBullets = false;
 	public bool spreadShot = false;
 	public float fireRate = .1f;
@@ -21,7 +20,6 @@ public class Settings : MonoBehaviour
 	
 	[Header("Enemy Spawning Settings")]
 	public bool spawnEnemies = false;
-	[InspectorName("Use ECS for Enemies")]
 	public bool useECSforEnemies = true;
 	
 	[Header("Game Object References")]
@@ -41,18 +39,6 @@ public class Settings : MonoBehaviour
 	
 	public static Vector3 PlayerGunBarrelRotationEuler => 
 		Instance._playerShooting.gunBarrel.rotation.eulerAngles;
-	#endregion
-
-	#region Bullet Spawning Properties
-	public static bool IsUsingECSForBullets() => Instance.useECSforBullets;
-	public static bool IsUsingSpreadShot() => Instance.spreadShot;
-	public static int  GetSpreadAmount() => Instance.spreadAmount;
-	public static float GetFireRate() => Instance.fireRate;
-	#endregion
-	
-	#region Enemy Spawning Properties
-	public static bool IsSpawningEnemies() => Instance.spawnEnemies;
-	public static bool IsUsingECSForEnemies() => Instance.useECSforEnemies;
 	#endregion
 	
 	void Awake()

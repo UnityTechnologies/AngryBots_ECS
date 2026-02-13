@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 		// We only need to do the ECS steps if the player is using ECS for bullets and 
 		// entities. This isn't a perfect way to set it up, but it works in this
 		// simple example
-		useECS = Settings.IsUsingECSForBullets();
+		useECS = Settings.Instance.useECSforBullets;
 		
 		CreateEntity();
 	}

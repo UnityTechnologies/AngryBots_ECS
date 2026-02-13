@@ -32,7 +32,7 @@ public class EnemySpawner : MonoBehaviour
 		cooldown = spawnInterval;
 
 		// If not using ECS, no need to do anything here
-		if (!Settings.IsUsingECSForEnemies())
+		if (!Settings.Instance.useECSforEnemies)
 			return;
 		
 		// Get a reference to an EntityManager which is how we will create and access entities
@@ -41,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
 	
 	void Update()
     {
-		if (!Settings.IsSpawningEnemies() || Settings.IsPlayerDead())
+		if (!Settings.Instance.spawnEnemies || Settings.IsPlayerDead())
 			return;
 
 		cooldown -= Time.deltaTime;
@@ -59,7 +59,7 @@ public class EnemySpawner : MonoBehaviour
 		{
 			Vector3 newEnemyPosition = Settings.GetPositionAroundPlayer(enemySpawnRadius);
 
-			if (!Settings.IsUsingECSForEnemies())
+			if (!Settings.Instance.useECSforEnemies)
 			{
 				Instantiate(enemyPrefab, newEnemyPosition, Quaternion.identity);
 			}
