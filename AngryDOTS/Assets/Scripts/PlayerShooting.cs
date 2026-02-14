@@ -1,15 +1,5 @@
 ﻿/* PLAYER SHOOTING
- * This script manages the process of shooting bullets. Most of the code is general
- * or used for GameObject workflows. The DOTS items to be aware of in this script are:
-	* - The entity member: manager
-	* - The initialization in the Start() method
-	* - The entity instantiation in the SpawnBulletECS() and SpawnBulletSpreadECS() methods
- *
- * Note: This code is for presentation and learning purposes. We're handing off the spawning
- *	of entities to the Systems, but based on MonoBehaviour input.
- * 
- *  You can have all of the input detection code be systems-based, please refer to our ECS samples:
- *	https://github.com/Unity-Technologies/EntityComponentSystemSamples
+ * This script manages the process of shooting bullets as GameObjects.
  */
 
 using UnityEngine;

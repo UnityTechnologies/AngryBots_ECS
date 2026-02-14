@@ -15,6 +15,7 @@ partial struct SpawnEnemySystem : ISystem
     
     // A query to find the directory data component
     EntityQuery directoryQuery;
+    EntityManager manager;
     
     public void OnCreate(ref SystemState state)
     {
@@ -37,7 +38,7 @@ partial struct SpawnEnemySystem : ISystem
         Directory directory = directoryQuery.GetSingleton<Directory>();
 
         Entity enemyPrefab = directory.enemyPrefab;
-        EntityManager manager = state.EntityManager;
+        manager = state.EntityManager;
 
         timer += SystemAPI.Time.DeltaTime;
 

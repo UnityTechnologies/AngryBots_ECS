@@ -1,11 +1,5 @@
 ﻿/* ENEMY SPAWNER
- * This script manages the process of spawning enemies. Most of the code is general
- * or used for GameObject workflows, and DOTS items are nearly identical to the
- * PlayerShooting script (instead of bullets, this script spawn enemies). The DOTS 
- * items to be aware of in this script are:
-	* - The entity members: manager
-	* - The initialization in the Start() method
-	* - The entity instantiation in the Spawn() method
+ * This script manages the process of spawning enemies as GameObjects.
  */
 
 using UnityEngine;
